@@ -3,15 +3,16 @@ from django.views import View
 
 from django.contrib.auth.mixins import LoginRequiredMixin
 
-from .models import Balance
+from .models import ExpenseItem, Balance
 from .forms import BalanceForm
 
 class IndexView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
 
-        context             = {}
-        context["balances"] = Balance.objects.filter(user=request.user.id).order_by("-use_date")
+        context                     = {}
+        context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
+        context["balances"]         = Balance.objects.filter(user=request.user.id).order_by("-use_date")
 
         return render(request, "finance/index.html", context)
     

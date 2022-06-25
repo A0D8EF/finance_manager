@@ -2,9 +2,18 @@ from django.db import models
 from django.utils import timezone
 from django.contrib.auth.models import User
 
+class ExpenseItem(models.Model):
+    user    = models.ForeignKey(User, verbose_name="投稿者", on_delete=models.CASCADE)
+    income  = models.BooleanField(verbose_name="収入")
+    name    = models.CharField(verbose_name="費目", max_length=20)
+
+    def __str__(self):
+        return self.name
+
 class Balance(models.Model):
     user        = models.ForeignKey(User, verbose_name="投稿者", on_delete=models.CASCADE)
     dt          = models.DateTimeField(verbose_name="投稿日時", default=timezone.now)
+    expense_item    = models.ForeignKey(ExpenseItem, verbose_name="費目", default="-1", on_delete=models.SET_DEFAULT)
 
     income      = models.BooleanField(verbose_name="収入")
     amount      = models.PositiveIntegerField(verbose_name="金額")
@@ -28,9 +37,6 @@ class CardUsage(models.Model):
     pass
 
 class Payment(models.Model):
-    pass
-
-class ExpenseItem(models.Model):
     pass
 
 """

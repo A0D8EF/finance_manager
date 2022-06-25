@@ -8,6 +8,11 @@
             <span>収入：</span>
             <input type="checkbox" name="income">
         </label>
+        <select name="expense_item">
+            {% for expense_item in expense_items %}
+            <option value="{{ expense_item.id }}">{{ expense_item.name }}</option>
+            {% endfor %}
+        </select>
         <input type="number" name="amount">
         <input type="date" name="use_date">
         <textarea name="description"></textarea>
@@ -17,13 +22,13 @@
 
     {% for balance in balances %}
     <div class="border">
-        <div>{{ balance.dt              }}</div>
-        <div>{{ balance.user.username   }}</div>
-        <div>{{ balance.income          }}</div>
-        <div>{{ balance.amount          }}</div>
-        <div>{{ balance.use_date        }}</div>
-        <div>{{ balance.description     }}</div>
-    </div>
+        <div>投稿日時：{{ balance.dt            }}</div>
+        <div>ユーザー：{{ balance.user.username }}</div>
+        <div>収支：{{ balance.expense_item.income }}</div>
+        <div>費目：{{ balance.expense_item.name }}</div>
+        <div>金額：{{ balance.amount            }}</div>
+        <div>利用日：{{ balance.use_date        }}</div>
+        <div>利用内容：{{ balance.description   }}</div>
     {% endfor %}
 {% endblock %}
 
