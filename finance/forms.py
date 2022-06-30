@@ -5,5 +5,5 @@ class BalanceForm(forms.ModelForm):
 
     class Meta:
         model   = Balance
-        fields  = [ "user", "expense_item", "income", "amount", "use_date", "description" ]
+        fields  = [ "user", "expense_item", "amount", "use_date", "description" ]
 

@@ -27,6 +27,44 @@ DEBUG = True
 
 ALLOWED_HOSTS = []
 
+#################django-allauthでのメール認証設定ここから###################
+
+from . import local_settings
+
+#djangoallauthでメールでユーザー認証する際に必要になる認証バックエンド
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",
+    "allauth.account.auth_backends.AuthenticationBackend",
+]
+
+#ログイン時の認証方法はemailとパスワードとする
+ACCOUNT_AUTHENTICATION_METHOD   = "username"
+
+#ログイン時にユーザー名(ユーザーID)は使用しない
+ACCOUNT_USERNAME_REQUIRED       = "True"
+
+#ユーザー登録時に入力したメールアドレスに、確認メールを送信する事を必須(mandatory)とする
+ACCOUNT_EMAIL_VARIFICATION  = "mandatory"
+
+#ユーザー登録画面でメールアドレス入力を要求する(True)
+ACCOUNT_EMAIL_REQUIRED      = True
+
+
+#DEBUGがTrueのとき、メールの内容は全て端末に表示させる(実際にメールを送信したい時はここをコメントアウトする)
+if DEBUG:
+    EMAIL_BACKEND   = "django.core.mail.backends.console.EmailBackend"
+else:
+    #TODO:SendgridのAPIキーと送信元メールアドレスを入れていない時、以下が実行されると必ずエラーになる点に注意。
+    EMAIL_BACKEND       = "sendgrid_backend.SendgridBackend"
+    
+    DEFAULT_FROM_EMAIL  = local_settings.DEFAULT_FROM_EMAIL
+    SENDGRID_API_KEY    = local_settings.SENDGRID_API_KEY
+    
+    #Sendgrid利用時はサンドボックスモードを無効化しておく。
+    SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+
+#################django-allauthでのメール認証設定ここまで###################
+
 SITE_ID = 1
 LOGIN_REDIRECT_URL = "/"
 ACCOUNT_LOGOUT_REDIRECT_URL = "/"
@@ -66,7 +104,9 @@ ROOT_URLCONF = 'config.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [ BASE_DIR / "templates" ],
+        'DIRS': [ BASE_DIR / "templates",
+                  BASE_DIR / "templates" / "allauth", 
+                ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -128,6 +168,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 
 STATIC_URL = 'static/'
+STATICFILES_DIRS = [ BASE_DIR / "static" ]
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field

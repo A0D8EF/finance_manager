@@ -24,8 +24,8 @@
     <div class="border">
         <div>投稿日時：{{ balance.dt            }}</div>
         <div>ユーザー：{{ balance.user.username }}</div>
-        <div>収支：{{ balance.expense_item.income }}</div>
-        <div>費目：{{ balance.expense_item.name }}</div>
+        <div>収支：{{ balance.expense_item.income|default:"不明" }}</div>
+        <div>費目：{{ balance.expense_item.name|default:"不明" }}</div>
         <div>金額：{{ balance.amount            }}</div>
         <div>利用日：{{ balance.use_date        }}</div>
         <div>利用内容：{{ balance.description   }}</div>

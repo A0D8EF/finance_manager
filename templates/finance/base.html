@@ -7,7 +7,12 @@
     <title>Finance Manager</title>
 </head>
 <body>
-    <h1 class="bg-primary text-white">簡易掲示板</h1>
+    <h1 class="bg-primary text-white">Finance Uniform Management</h1>
+    
+    <a href="{% url 'account_logout' %}">ログアウト</a>
+    <a href="{% url 'account_reset_password' %}">パスワード変更</a>
+    <a href="{% url 'account_email' %}">メールアドレス変更</a>
+
     {% block main %}
     {% endblock %}
 </body>
