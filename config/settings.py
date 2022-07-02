@@ -41,7 +41,7 @@ AUTHENTICATION_BACKENDS = [
 ACCOUNT_AUTHENTICATION_METHOD   = "username"
 
 #ログイン時にユーザー名(ユーザーID)は使用しない
-ACCOUNT_USERNAME_REQUIRED       = "True"
+ACCOUNT_USERNAME_REQUIRED       = True
 
 #ユーザー登録時に入力したメールアドレスに、確認メールを送信する事を必須(mandatory)とする
 ACCOUNT_EMAIL_VARIFICATION  = "mandatory"
@@ -56,10 +56,10 @@ if DEBUG:
 else:
     #TODO:SendgridのAPIキーと送信元メールアドレスを入れていない時、以下が実行されると必ずエラーになる点に注意。
     EMAIL_BACKEND       = "sendgrid_backend.SendgridBackend"
-    
+
     DEFAULT_FROM_EMAIL  = local_settings.DEFAULT_FROM_EMAIL
     SENDGRID_API_KEY    = local_settings.SENDGRID_API_KEY
-    
+
     #Sendgrid利用時はサンドボックスモードを無効化しておく。
     SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
