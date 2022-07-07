@@ -1,0 +1,43 @@
+
+
+/* income toggle */
+.income_chk {
+    display: none;
+}
+
+.income_label {
+    display: inline-block;
+    position: relative;
+    width: 6rem;
+    height: 2rem;
+    margin: 0.25rem;
+    background: #444;
+    /* transition: 0.2s; */
+    cursor: pointer;
+    border-radius: 4px;
+}
+
+.income_label::before {
+    content: "支出";
+    font-weight: bold;
+    color: white;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 100%;
+    background: crimson;
+    transition: 0.2s;
+    border-radius: 4px;
+
+    /* contentの中央寄せ */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+input[type="checkbox"].income_chk:checked + .income_label::before {
+    content: "収入";
+    left: 50%;
+    background: forestgreen;
+}

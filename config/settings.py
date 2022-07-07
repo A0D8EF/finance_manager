@@ -71,6 +71,7 @@ ACCOUNT_LOGOUT_REDIRECT_URL = "/"
 
 # Application definition
 
+NUMBER_GROUPING = 3
 INSTALLED_APPS = [
     
     "finance.apps.FinanceConfig",
@@ -86,6 +87,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    "django.contrib.humanize",
 
 ]
 

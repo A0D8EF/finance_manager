@@ -1,20 +1,37 @@
 {% extends "finance/base.html" %}
+{% load static %}
+{% load humanize %}
+
+{% block extra_head %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/flatpickr/dist/flatpickr.min.css">
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+    <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
+
+    <link rel="stylesheet" href="{% static 'finance/css/index.css' %}">
+    <script src="{% static 'finance/js/index.js' %}"></script>
+{% endblock %}
 
 {% block main %}
     <form method="POST">
         {% csrf_token %}
 
+        {% comment %}
         <label>
             <span>収入：</span>
             <input type="checkbox" name="income">
         </label>
+        {% endcomment %}
+        
+        <input id="income_chk" class="income_chk" name="income" type="checkbox">
+        <label for="income_chk" class="income_label"></label>
+
         <select name="expense_item">
             {% for expense_item in expense_items %}
             <option value="{{ expense_item.id }}">{{ expense_item.name }}</option>
             {% endfor %}
         </select>
         <input type="number" name="amount">
-        <input type="date" name="use_date">
+        <input id="date" name="use_date">
         <textarea name="description"></textarea>
 
         <input type="submit" value="送信">
@@ -25,10 +42,15 @@
         <div>投稿日時：{{ balance.dt            }}</div>
         <div>ユーザー：{{ balance.user.username }}</div>
         <div>収支：{{ balance.expense_item.income|default:"不明" }}</div>
+        {# TODO:incomeがFalseのとき「不明」となってしまう #}
         <div>費目：{{ balance.expense_item.name|default:"不明" }}</div>
-        <div>金額：{{ balance.amount            }}</div>
+        <div>金額：{{ balance.amount|intcomma   }}</div>
         <div>利用日：{{ balance.use_date        }}</div>
         <div>利用内容：{{ balance.description   }}</div>
+    {% endfor %}
+
+    {% for monthly_balance in monthly_balances %}
+    <div class="border">{{ monthly_balance.month }}月：{{ monthly_balance.amount|intcomma }}円</div>
     {% endfor %}
 {% endblock %}
 
