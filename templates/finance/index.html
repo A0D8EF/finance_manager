@@ -12,15 +12,9 @@
 {% endblock %}
 
 {% block main %}
+    {% comment %}
     <form method="POST">
         {% csrf_token %}
-
-        {% comment %}
-        <label>
-            <span>収入：</span>
-            <input type="checkbox" name="income">
-        </label>
-        {% endcomment %}
 
         <input id="income_chk" class="income_chk" name="income" type="checkbox">
         <label for="income_chk" class="income_label"></label>
@@ -34,8 +28,38 @@
         <input id="date" name="use_date">
         <textarea name="description"></textarea>
 
-        <input type="submit" value="送信">
+        <input type="submit" value="登録">
     </form>
+    {% endcomment %}
+    
+    <label class="btn btn-primary" class="modal_label" for="modal_chk">追加</label>
+
+    {# モーダル領域 #}
+    <input id="modal_chk" class="modal_chk" type="checkbox">
+    <div class="modal_body">
+        <label class="modal_bg" for="modal_chk"></label>
+        <div class="modal_content">
+            <form method="POST">
+                {% csrf_token %}
+       
+                <input id="income_chk" class="income_chk" name="income" type="checkbox">
+                <label for="income_chk" class="income_label"></label>
+        
+                <select name="expense_item">
+                    {% for expense_item in expense_items %}
+                    <option value="{{ expense_item.id }}">{{ expense_item.name }}</option>
+                    {% endfor %}
+                </select>
+                <input type="number" name="amount">
+                <input id="date" name="use_date">
+                <textarea name="description"></textarea>
+        
+                <input type="submit" value="登録">
+            </form>
+            <label class="btn btn-danger" for="modal_chk">キャンセル</label>
+        </div>
+    </div>
+
 
     {% for balance in balances %}
     <div class="border">
@@ -53,15 +77,6 @@
     {% for monthly_balance in monthly_balances %}
     <div class="border">{{ monthly_balance.month }}月：{{ monthly_balance.amount|intcomma }}円</div>
     {% endfor %}
-
-    <label class="modal_label" for="modal_chk">追加</label>
-
-    {# モーダル領域 #}
-    <input id="modal_chk" class="modal_chk" type="checkbox">
-    <div class="modal_body">
-        <label class="modal_bg" for="modal_chk"></label>
-        <div class="modal_content"></div>
-    </div>
 
 {% endblock %}
 

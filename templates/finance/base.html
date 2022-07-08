@@ -1,10 +1,11 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="ja">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-
+    <link rel="stylesheet" href="{% static 'finance/css/base.css' %}">
     {# TODO:jQueryを入れておく #}
 
     <title>Finance Manager</title>
@@ -13,11 +14,15 @@
     {% endblock %}
 </head>
 <body>
-    <h1 class="bg-primary text-white">Finance Uniform Management</h1>
-    
-    <a href="{% url 'account_logout' %}">ログアウト</a>
-    <a href="{% url 'account_reset_password' %}">パスワード変更</a>
-    <a href="{% url 'account_email' %}">メールアドレス変更</a>
+    <header>
+        <h1 class="title">Finance Uniform Management</h1>
+        
+        <nav>
+            <a href="{% url 'account_logout' %}">ログアウト</a>
+            <a href="{% url 'account_reset_password' %}">パスワード変更</a>
+            <a href="{% url 'account_email' %}">メールアドレス変更</a>
+        </nav>
+    </header>
 
     {% block main %}
     {% endblock %}

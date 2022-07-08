@@ -45,7 +45,7 @@ input[type="checkbox"].income_chk:checked + .income_label::before {
 
 /* modal dialog */
 .modal_label {
-    border: solid 0.1rem black;
+    /* border: solid 0.1rem black; */
     padding: 0.25rem;
     cursor: pointer;
 }

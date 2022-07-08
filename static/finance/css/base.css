@@ -1,0 +1,28 @@
+header {
+    background: #b33e5c; /* ワインレッド */
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+.title {
+    color: white;
+    font-weight: bold;
+
+    padding: 0.3rem;
+}
+
+nav {
+
+}
+
+nav > a {
+    display: inline-block;
+    color: white;
+    padding: 0.3rem 0.3rem;
+}
+
+nav > a:hover {
+    color: white;
+    text-decoration: underline;
+}
