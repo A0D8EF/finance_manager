@@ -1,10 +1,25 @@
 from django.shortcuts import render, redirect
 from django.views import View
 
-from django.contrib.auth.mixins import LoginRequiredMixin
+from allauth.account.admin import EmailAddress
+from django.contrib.auth.mixins import AccessMixin
 
 from .models import ExpenseItem, Balance
 from .forms import BalanceForm
+
+class LoginRequiredMixin(AccessMixin):
+
+    def dispatch(self, request, *args, **kwargs):
+
+        if not request.user.is_authenticated:
+            return self.handle_no_permission()
+
+        if not EmailAddress.objects.filter(user=request.user.id, verified=True).exists():
+            print("メールの確認が済んでいません")
+            return redirect("account_email")
+
+        return super().dispatch(request, *args, **kwargs)
+
 
 class IndexView(LoginRequiredMixin, View):
 

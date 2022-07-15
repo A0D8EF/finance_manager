@@ -10,7 +10,6 @@
     position: relative;
     width: 6rem;
     height: 2rem;
-    margin: 0.25rem;
     background: #444;
     /* transition: 0.2s; */
     cursor: pointer;
@@ -45,8 +44,6 @@ input[type="checkbox"].income_chk:checked + .income_label::before {
 
 /* modal dialog */
 .modal_label {
-    /* border: solid 0.1rem black; */
-    padding: 0.25rem;
     cursor: pointer;
 }
 
@@ -56,8 +53,6 @@ input[type="checkbox"].income_chk:checked + .income_label::before {
 
 .modal_body {
     display: none;
-    width: 100vw;
-    height: 100vh;
 }
 
 .modal_bg {
@@ -75,11 +70,20 @@ input[type="checkbox"].income_chk:checked + .income_label::before {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
-    height: 80%;
+    width: 60%;
+    max-height: 80%;
+    overflow-y: auto;
     background: white;
+
+    padding: 3rem;
 }
 
 input[type="checkbox"].modal_chk:checked + .modal_body {
     display: block;
+}
+
+@media (max-width:800px){
+    .modal_content{
+        padding: 1rem;
+    }
 }

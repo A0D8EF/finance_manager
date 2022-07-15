@@ -32,41 +32,13 @@
     </form>
     {% endcomment %}
     
-    <label class="btn btn-primary" class="modal_label" for="modal_chk">追加</label>
-
-    {# モーダル領域 #}
-    <input id="modal_chk" class="modal_chk" type="checkbox">
-    <div class="modal_body">
-        <label class="modal_bg" for="modal_chk"></label>
-        <div class="modal_content">
-            <form method="POST">
-                {% csrf_token %}
-       
-                <input id="income_chk" class="income_chk" name="income" type="checkbox">
-                <label for="income_chk" class="income_label"></label>
-        
-                <select name="expense_item">
-                    {% for expense_item in expense_items %}
-                    <option value="{{ expense_item.id }}">{{ expense_item.name }}</option>
-                    {% endfor %}
-                </select>
-                <input type="number" name="amount">
-                <input id="date" name="use_date">
-                <textarea name="description"></textarea>
-        
-                <input type="submit" value="登録">
-            </form>
-            <label class="btn btn-danger" for="modal_chk">キャンセル</label>
-        </div>
-    </div>
-
+    <label class="modal_label btn btn-primary" for="modal_chk">追加</label>
 
     {% for balance in balances %}
     <div class="border">
         <div>投稿日時：{{ balance.dt            }}</div>
         <div>ユーザー：{{ balance.user.username }}</div>
-        <div>収支：{{ balance.expense_item.income|default:"不明" }}</div>
-        {# TODO:incomeがFalseのとき「不明」となってしまう #}
+        <div>収支：{% if balance.expense_item.income %}収入{% else %}支出{% endif %}</div>
         <div>費目：{{ balance.expense_item.name|default:"不明" }}</div>
         <div>金額：{{ balance.amount|intcomma   }}</div>
         <div>利用日：{{ balance.use_date        }}</div>
@@ -77,6 +49,44 @@
     {% for monthly_balance in monthly_balances %}
     <div class="border">{{ monthly_balance.month }}月：{{ monthly_balance.amount|intcomma }}円</div>
     {% endfor %}
+
+    
+    {# モーダル領域 #}
+    <input id="modal_chk" class="modal_chk" type="checkbox">
+    <div class="modal_body">
+        <label class="modal_bg" for="modal_chk"></label>
+        <div class="modal_content">
+            
+            <h2>登録</h2>
+
+            <form method="POST">
+                {% csrf_token %}
+       
+                <input id="date" class="form-control my-2" name="use_date">
+
+                <div class="form-inline my-2">
+                    <input id="income_chk" class="income_chk" name="income" type="checkbox">
+                    <label for="income_chk" class="income_label mr-2"></label>
+            
+                    <select class="form-control" name="expense_item" required>
+                        <option value="">費目を選んでください</option>
+                        {% for expense_item in expense_items %}
+                        <option value="{{ expense_item.id }}">{{ expense_item.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+
+                <input class="form-control my-2" type="number" name="amount" placeholder="金額を入力してください" min="0" required>
+                
+                <textarea class="form-control my-2" name="description" placeholder="備考"></textarea>
+        
+                <div class="form-row my-2">
+                    <input class="col-sm-6 btn btn-success" type="submit" value="登録">
+                    <label class="col-sm-6 btn btn-danger my-0" for="modal_chk">キャンセル</label>
+                </div>
+            </form>
+        </div>
+    </div>
 
 {% endblock %}
 

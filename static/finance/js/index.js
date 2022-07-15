@@ -16,4 +16,11 @@ window.addEventListener("load", function (){
 
     flatpickr("#date", config_date);
 
+    $("#income_chk").on("change", function(){ change_expense_item( $(this).prop("checked") ); });
+
 });
+
+function change_expense_item(income){
+    // TODO:selectタグの選択肢をレンダリング（Ajax）
+    console.log(income);
+}
