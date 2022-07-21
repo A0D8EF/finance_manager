@@ -18,9 +18,31 @@ window.addEventListener("load", function (){
 
     $("#income_chk").on("change", function(){ change_expense_item( $(this).prop("checked") ); });
 
+    change_expense_item($("#income_chk").prop("checked"));
+
 });
 
 function change_expense_item(income){
-    // TODO:selectタグの選択肢をレンダリング（Ajax）
     console.log(income);
+
+    url = "income/?income=" + String(income);
+
+    console.log(url);
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        dataType: 'json'
+    }).done( function(data, status, xhr ){
+        console.log("done");
+
+        if(!data.error){
+            $("[name='expense_item']").html(data.content);
+        }else{
+            console.log("費目フラグバリデーションエラー")
+        }
+
+    }).fail( function(xhr, status, error ){
+        console.log(status + ":" + error )
+    });
 }

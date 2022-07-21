@@ -69,10 +69,12 @@
                     <label for="income_chk" class="income_label mr-2"></label>
             
                     <select class="form-control" name="expense_item" required>
+                        {% comment %}
                         <option value="">費目を選んでください</option>
                         {% for expense_item in expense_items %}
                         <option value="{{ expense_item.id }}">{{ expense_item.name }}</option>
                         {% endfor %}
+                        {% endcomment %}
                     </select>
                 </div>
 

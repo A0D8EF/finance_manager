@@ -1,0 +1,4 @@
+<option value="">費目を選んでください</option>
+{% for expense_item in expense_items %}
+<option value="{{ expense_item.id }}">{{ expense_item.name }}</option>
+{% endfor %}

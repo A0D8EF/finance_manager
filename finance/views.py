@@ -5,7 +5,10 @@ from allauth.account.admin import EmailAddress
 from django.contrib.auth.mixins import AccessMixin
 
 from .models import ExpenseItem, Balance
-from .forms import BalanceForm
+from .forms import BalanceForm, IncomeForm
+
+from django.http.response import JsonResponse
+from django.template.loader import render_to_string
 
 class LoginRequiredMixin(AccessMixin):
 
@@ -56,7 +59,7 @@ class IndexView(LoginRequiredMixin, View):
     def get(self, request, *args, **kwargs):
 
         context                     = {}
-        context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
+        # context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
         context["balances"]         = Balance.objects.filter(user=request.user.id).order_by("-use_date")
 
         context["monthly_balances"] = self.monthly_calc( Balance.objects.filter(user=request.user.id, use_date__year=2022).order_by("-use_date"))
@@ -87,5 +90,31 @@ class IndexView(LoginRequiredMixin, View):
 index = IndexView.as_view()
 
 
+class IncomeView(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+
+        data    = { "error": True }
+
+        form    = IncomeForm(request.GET)
+
+        if not form.is_valid():
+            print(form.errors)
+            return JsonResponse(data)
+        
+        # 収入フラグの値をブーリアン値に変更する
+        # request.GET["income"]で出てくるのは"true"という文字列
+        cleaned     = form.clean()
+        print(cleaned["income"])
+        context     = {}
+        context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id, income=cleaned["income"])
+
+        data["error"]   = False
+        # render_to_stringでレンダリング結果を文字列として返す
+        data["content"] = render_to_string("finance/income.html", context, request)
+
+        return JsonResponse(data)
+        # data = { "error": False, "content": レンダリング結果の文字列 }
 
 
+income = IncomeView.as_view()
