@@ -1,0 +1,30 @@
+
+/* add expense item */
+.add_expense_item {
+    padding: 1rem;
+}
+
+.border > div {
+    display: inline-block;
+}
+
+.income {
+    font-weight: bold;
+    color: white;
+    background: crimson;
+    border-radius: 4px;
+    width: 3rem;
+    height: 2rem;
+    padding: 0.25rem 0.5rem;
+}
+
+
+.outgo {
+    font-weight: bold;
+    color: white;
+    background: forestgreen;
+    border-radius: 4px;
+    width: 3rem;
+    height: 2rem;
+    padding: 0.25rem 0.5rem;
+}

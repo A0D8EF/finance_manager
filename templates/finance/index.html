@@ -12,25 +12,6 @@
 {% endblock %}
 
 {% block main %}
-    {% comment %}
-    <form method="POST">
-        {% csrf_token %}
-
-        <input id="income_chk" class="income_chk" name="income" type="checkbox">
-        <label for="income_chk" class="income_label"></label>
-
-        <select name="expense_item">
-            {% for expense_item in expense_items %}
-            <option value="{{ expense_item.id }}">{{ expense_item.name }}</option>
-            {% endfor %}
-        </select>
-        <input type="number" name="amount">
-        <input id="date" name="use_date">
-        <textarea name="description"></textarea>
-
-        <input type="submit" value="登録">
-    </form>
-    {% endcomment %}
     
     <label class="modal_label btn btn-primary" for="modal_chk">追加</label>
 
@@ -68,7 +49,7 @@
                     <input id="income_chk" class="income_chk" name="income" type="checkbox">
                     <label for="income_chk" class="income_label mr-2"></label>
             
-                    <select class="form-control" name="expense_item" required>
+                    <select class="form-control mr-2" name="expense_item" required>
                         {% comment %}
                         <option value="">費目を選んでください</option>
                         {% for expense_item in expense_items %}
@@ -76,6 +57,8 @@
                         {% endfor %}
                         {% endcomment %}
                     </select>
+
+                    <a class="btn btn-primary" href="{% url 'finance:add_expense_item' %}">費目の追加</a>
                 </div>
 
                 <input class="form-control my-2" type="number" name="amount" placeholder="金額を入力してください" min="0" required>

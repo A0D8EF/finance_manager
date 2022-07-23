@@ -5,7 +5,7 @@ from allauth.account.admin import EmailAddress
 from django.contrib.auth.mixins import AccessMixin
 
 from .models import ExpenseItem, Balance
-from .forms import BalanceForm, IncomeForm
+from .forms import BalanceForm, IncomeForm, ExpenseItemForm
 
 from django.http.response import JsonResponse
 from django.template.loader import render_to_string
@@ -118,3 +118,34 @@ class IncomeView(LoginRequiredMixin, View):
 
 
 income = IncomeView.as_view()
+
+
+class ExpenseItemView(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+
+        context                 = {}
+        context["expense_items"] = ExpenseItem.objects.filter(user=request.user.id)
+
+        return render(request, "finance/add_expense_item.html", context)
+
+    def post(self, request, *args, **kwargs):
+        
+        copied          = request.POST.copy()
+        copied["user"]  = request.user.id
+
+        form    = ExpenseItemForm(copied)
+
+        if not form.is_valid():
+            print("ExpenseItem: バリデーションNG")
+            print(form.errors)
+            return redirect("finance:income")
+
+        print("ExpenseItem: バリデーションOK")
+        form.save()
+
+        return redirect("finance:index")
+
+
+expense_item = ExpenseItemView.as_view()
+
