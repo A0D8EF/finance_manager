@@ -1,6 +1,8 @@
 from django import forms
 from .models import Balance, ExpenseItem
 
+from django.core.validators import MinValueValidator, MaxValueValidator
+
 class BalanceForm(forms.ModelForm):
 
     class Meta:
@@ -21,3 +23,10 @@ class IncomeForm(forms.ModelForm):
     class Meta:
         model   = ExpenseItem
         fields  = ["income"]
+
+
+# 年月検索用バリデーションフォーム
+class YearMonthForm(forms.Form):
+    year    = forms.IntegerField()
+    month   = forms.IntegerField(validators=[MinValueValidator(1), MaxValueValidator(12)])
+

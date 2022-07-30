@@ -17,8 +17,9 @@ window.addEventListener("load", function (){
     flatpickr("#date", config_date);
 
     $("#income_chk").on("change", function(){ change_expense_item( $(this).prop("checked") ); });
-
     change_expense_item($("#income_chk").prop("checked"));
+
+    $("#add_income").on("click", function() { add_income(); });
 
 });
 
@@ -39,10 +40,45 @@ function change_expense_item(income){
         if(!data.error){
             $("[name='expense_item']").html(data.content);
         }else{
-            console.log("費目フラグバリデーションエラー")
+            console.log("費目フラグバリデーションエラー");
         }
 
     }).fail( function(xhr, status, error ){
-        console.log(status + ":" + error )
+        console.log(status + ":" + error );
     });
 }
+
+function add_income(){
+
+    let form_elem = "#add_income_form";
+
+    let data    = new FormData( $(form_elem).get(0) );
+    let url     = $(form_elem).prop("action");
+    let method  = $(form_elem).prop("method");
+
+    console.log("for v of data");
+    for (let v of data){ console.log(v); }
+    console.log("for v of data.entries()");
+    for (let v of data.entries()){ console.log(v); }
+
+    $.ajax({
+        url: url,
+        type: method,
+        data: data,
+        processData: false, // dataに指定しtあ内容をURLにエンコードして送信するかの指定
+        contentType: false, // デフォルトではURLエンコードされた形式で送信されてしまう
+        dataType: 'json'
+    }).done( function(data, status, xhr ){
+        
+        if(data.error){
+            console.log("ERROR");
+        }else{
+            change_expense_item($("#income_chk").prop("checked"));
+        }
+
+    }).fail( function(xhr, status, error) {
+        console.log(status + ":" + error );
+    });
+    
+}
+

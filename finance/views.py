@@ -5,7 +5,9 @@ from allauth.account.admin import EmailAddress
 from django.contrib.auth.mixins import AccessMixin
 
 from .models import ExpenseItem, Balance
-from .forms import BalanceForm, IncomeForm, ExpenseItemForm
+from .forms import BalanceForm, IncomeForm, ExpenseItemForm, YearMonthForm
+
+from . import calender
 
 from django.http.response import JsonResponse
 from django.template.loader import render_to_string
@@ -58,13 +60,23 @@ class IndexView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):
 
-        context                     = {}
+        context             = {}
+        context["months"]    = [ i for i in range(1,13) ]
+
+        form    = YearMonthForm(request.GET)
+
+        if form.is_valid():
+            cleaned = form.clean()
+
+
         # context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
         context["balances"]         = Balance.objects.filter(user=request.user.id).order_by("-use_date")
 
         context["monthly_balances"] = self.monthly_calc( Balance.objects.filter(user=request.user.id, use_date__year=2022).order_by("-use_date"))
         # models.DateField のフィールド名に __year で年を取り出す
         # TODO: ユーザーが入力した年（カレンダーで選択されている月？）の集計をできるように
+
+        context["calender"]       = calender.create_calender(2022, 7)
 
         return render(request, "finance/index.html", context)
     
@@ -105,7 +117,7 @@ class IncomeView(LoginRequiredMixin, View):
         # 収入フラグの値をブーリアン値に変更する
         # request.GET["income"]で出てくるのは"true"という文字列
         cleaned     = form.clean()
-        print(cleaned["income"])
+        
         context     = {}
         context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id, income=cleaned["income"])
 
@@ -115,6 +127,24 @@ class IncomeView(LoginRequiredMixin, View):
 
         return JsonResponse(data)
         # data = { "error": False, "content": レンダリング結果の文字列 }
+    
+    def post(self, request, *args, **kwargs):
+
+        data    = { "error": True }
+
+        copied          = request.POST.copy()
+        copied["user"]  = request.user.id
+
+        form    = ExpenseItemForm(copied)
+
+        if not form.is_valid():
+            print(form.errors)
+            return JsonResponse(data)
+        
+        form.save()
+        data["error"]   = False
+
+        return JsonResponse(data)
 
 
 income = IncomeView.as_view()

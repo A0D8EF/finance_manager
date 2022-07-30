@@ -5,9 +5,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.1.0/css/all.css" integrity="sha384-lKuwvrZot6UHsBSfcMvOkWwlCMgc0TaWr+30HWe3a4ltaBwTZhyTEggF5tJv8tbt" crossorigin="anonymous">
+    
     <link rel="stylesheet" href="{% static 'finance/css/base.css' %}">
 
-    <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js" integrity="sha256-/xUj+30JU5yExlq6GSYGSHk7tPXikynS7ogEvDej/m4=" crossorigin="anonymous"></script> -->
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <title>Finance Manager</title>
 
@@ -19,8 +20,8 @@
         <h1 class="title">Finance Uniform Management</h1>
         
         <nav>
-            <a href="{% url 'account_logout' %}">ログアウト</a>
-            <a href="{% url 'account_reset_password' %}">パスワード変更</a>
+            <a href="{% url 'account_logout' %}" style="font-size:1.5rem; color:white;"><i class="fas fa-sign-out-alt"></i></a>
+            <a href="{% url 'account_reset_password' %}" style="font-size:1.5rem; color:white;"><i class="fas fa-cog"></i></a>
             <a href="{% url 'account_email' %}">メールアドレス変更</a>
         </nav>
     </header>

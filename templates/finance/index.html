@@ -15,6 +15,41 @@
     
     <label class="modal_label btn btn-primary" for="modal_chk">追加</label>
 
+    <form action="" method="GET">
+        <select name="year">
+            <option value="2022">2022年</option>
+        </select>
+        <select name="month">
+            {% for month in months %}
+            <option value="{{ month }}">{{ month }}月</option>
+            {% endfor %}
+        </select>
+    </form>
+
+    <!-- カレンダー -->
+    <table class="calender">
+        <thead>
+            <tr class="calender_head">
+                <td>日</td>
+                <td>月</td>
+                <td>火</td>
+                <td>水</td>
+                <td>木</td>
+                <td>金</td>
+                <td>土</td>
+            </tr>
+        </thead>
+        <tbody>
+            {% for week in calender %}
+            <tr>
+                {% for date in week %}
+                <td>{{ date.day }}</td>
+                {% endfor %}
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
     {% for balance in balances %}
     <div class="border">
         <div>投稿日時：{{ balance.dt            }}</div>
@@ -58,7 +93,9 @@
                         {% endcomment %}
                     </select>
 
-                    <a class="btn btn-primary" href="{% url 'finance:add_expense_item' %}">費目の追加</a>
+                    <a href="{% url 'finance:add_expense_item' %}" style="font-size:2rem; color:lightgreen;">
+                        <i class="fas fa-plus-circle"></i>
+                    </a>
                 </div>
 
                 <input class="form-control my-2" type="number" name="amount" placeholder="金額を入力してください" min="0" required>
@@ -69,6 +106,21 @@
                     <input class="col-sm-6 btn btn-success" type="submit" value="登録">
                     <label class="col-sm-6 btn btn-danger my-0" for="modal_chk">キャンセル</label>
                 </div>
+            </form>
+
+            <form id="add_income_form" action="{% url 'finance:income' %}" method="POST">
+                {% csrf_token %}
+
+                <div class="form-inline my-2">
+                    <input id="ei_income_chk" class="income_chk" name="income" type="checkbox">
+                    <label for="ei_income_chk" class="income_label mr-2"></label>
+
+                    <input type="text" class="form-control" name="name" required>
+                </div>
+
+                {# TIPS:type="sunmit"だとHTTPによるリクエストが送信される #}
+                <input id="add_income" type="button" class="btn btn-primary" value="費目の追加">
+                <!-- <a href="{% url 'finance:index' %}" class="btn btn-danger">キャンセル</a> -->
             </form>
         </div>
     </div>
