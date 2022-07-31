@@ -21,6 +21,9 @@ window.addEventListener("load", function (){
 
     $("#add_income").on("click", function() { add_income(); });
     $("#modal_sw").on("click", function() { list_income(); });
+    $(".modal_bg").on("click", function() {
+        $("#modal_sw").prop("checked", false);
+    })
 
 });
 
