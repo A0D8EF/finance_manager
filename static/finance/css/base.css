@@ -1,5 +1,6 @@
 header {
-    background: #b33e5c; /* ワインレッド */
+    /* background: #b33e5c; ワインレッド */
+    background: #288c66;
     display: flex;
     justify-content: space-between;
     align-items: flex-end;

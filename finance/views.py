@@ -150,6 +150,31 @@ class IncomeView(LoginRequiredMixin, View):
 income = IncomeView.as_view()
 
 
+class IncomeListView(LoginRequiredMixin, View):
+
+    def get(self, request, *args, **kwargs):
+
+        data    = { "error": True }
+
+        form    = IncomeForm(request.GET)
+
+        if not form.is_valid():
+            print(form.errors)
+            return JsonResponse(data)
+        
+        cleaned     = form.clean()
+        
+        context     = {}
+        context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
+
+        data["error"]   = False
+        data["content"] = render_to_string("finance/income_list.html", context, request)
+
+        return JsonResponse(data)
+
+income_list = IncomeListView.as_view()
+
+
 class ExpenseItemView(LoginRequiredMixin, View):
 
     def get(self, request, *args, **kwargs):

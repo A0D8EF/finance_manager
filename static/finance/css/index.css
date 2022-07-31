@@ -1,4 +1,110 @@
+.index_flexbox {
+    width: 100%;
+    display: flex;
+}
 
+.index_flexbox > div {
+    width: 50%;
+    padding: 2rem;
+}
+
+/* tab system */
+.tab_radio { display: none; }
+
+.tab_area {
+    display: none;
+    border: solid 0.1rem #288c66;
+    margin-top: 0;
+    padding: 1rem;
+}
+
+.tab_label {
+    display: inline-block;
+    border-top: solid 0.1rem darkgray;
+    border-left: solid 0.1rem darkgray;
+    border-right: solid 0.1rem darkgray;
+    border-radius: 0 0.4rem 0 0;
+    width: 6rem;
+    height: 2rem;
+    background-color: darkgray;
+    cursor: pointer;
+    color: white;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 0;
+}
+
+.tab_radio:checked + .tab_label {
+    background-color: #288c66;
+    border-top: solid 0.1rem #288c66;
+    border-left: solid 0.1rem #288c66;
+    border-right: solid 0.1rem #288c66;
+}
+
+#tab_radio_1:checked ~ #tab_area_1 { display: block; }
+#tab_radio_2:checked ~ #tab_area_2 { display: block; }
+#tab_radio_3:checked ~ #tab_area_3 { display: block; }
+
+
+/* tab1: calender */
+/* #tab_area_1 { text-align: center; } */
+#tab_area_1 > form {
+    text-align: center;
+    font-size: 1.5rem;
+}
+.calender {
+    width: 90%;
+    text-align: center;
+    font-size: 1.5rem;
+    border: solid 0.2rem black;
+    margin: 1rem auto 0;
+}
+.calender td {
+    padding: 0.5rem;
+    border: solid 0.1rem black;
+}
+.calender td:nth-child(1) {
+    color: crimson;
+}
+.calender td:nth-child(7) {
+    color: royalblue;
+}
+.calender_head {
+    font-weight: bold;
+    border-bottom: double 0.2rem black;
+}
+.add_balance {
+    text-align: right;
+    padding-right: 0.5rem;
+}
+
+/* tab2: balance list */
+.balance_list {
+    width: 100%;
+    text-align: center;
+}
+.balance_list td { padding: 0.5rem; }
+.balance_list_head {
+    font-weight: bold;
+    border-bottom: solid 0.2rem black;
+}
+.balance_list_body td {
+    border-bottom: solid 0.1rem darkgray;
+}
+.balance_list_body td:nth-child(2) { width: 4rem; }
+.balance_list_body td:nth-child(4) { text-align:right ; }
+.balance_list_body td:nth-child(6) { width: 1rem; }
+.balance_list_body td:nth-child(7) { width: 1rem; }
+
+.balance_list_body td:nth-child(2) > label {
+    font-weight: bold;
+    color: white;
+    border-radius: 4px;
+    width: 3rem;
+    height: 2rem;
+    padding: 0.25rem 0.5rem;
+    text-align: center;
+}
 
 /* income toggle */
 .income_chk {
@@ -38,7 +144,7 @@
 input[type="checkbox"].income_chk:checked + .income_label::before {
     content: "収入";
     left: 50%;
-    background: forestgreen;
+    background: #143cdb;
 }
 
 
@@ -82,27 +188,42 @@ input[type="checkbox"].modal_chk:checked + .modal_body {
     display: block;
 }
 
+/* switch modal dialog */
+.modal_expense_item {
+    display: none;
+}
 
-/* calender */
-.calender {
-    text-align: center;
-    font-size: 1.5rem;
-    border: solid 0.2rem black;
-    margin: 0.5rem auto 0;
+#modal_sw:checked ~ .modal_expense_item {
+    display: block;
 }
-.calender td {
-    padding: 0.5rem;
-    border: solid 0.1rem black;
+
+#modal_sw:checked ~ .modal_balance {
+    display: none;
 }
-.calender td:nth-child(1) {
-    color: crimson;
+
+/* 費目一覧 */
+.border > div {
+    display: inline-block;
 }
-.calender td:nth-child(7) {
-    color: royalblue;
-}
-.calender_head {
+
+.income {
     font-weight: bold;
-    border-bottom: double 0.2rem black;
+    color: white;
+    background: #143cdb;
+    border-radius: 4px;
+    width: 3rem;
+    height: 2rem;
+    padding: 0.25rem 0.5rem;
+}
+
+.outgo {
+    font-weight: bold;
+    color: white;
+    background: crimson;
+    border-radius: 4px;
+    width: 3rem;
+    height: 2rem;
+    padding: 0.25rem 0.5rem;
 }
 
 

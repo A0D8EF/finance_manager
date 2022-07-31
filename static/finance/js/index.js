@@ -20,6 +20,7 @@ window.addEventListener("load", function (){
     change_expense_item($("#income_chk").prop("checked"));
 
     $("#add_income").on("click", function() { add_income(); });
+    $("#modal_sw").on("click", function() { list_income(); });
 
 });
 
@@ -56,16 +57,11 @@ function add_income(){
     let url     = $(form_elem).prop("action");
     let method  = $(form_elem).prop("method");
 
-    console.log("for v of data");
-    for (let v of data){ console.log(v); }
-    console.log("for v of data.entries()");
-    for (let v of data.entries()){ console.log(v); }
-
     $.ajax({
         url: url,
         type: method,
         data: data,
-        processData: false, // dataに指定しtあ内容をURLにエンコードして送信するかの指定
+        processData: false, // dataに指定した内容をURLにエンコードして送信するかの指定
         contentType: false, // デフォルトではURLエンコードされた形式で送信されてしまう
         dataType: 'json'
     }).done( function(data, status, xhr ){
@@ -80,5 +76,28 @@ function add_income(){
         console.log(status + ":" + error );
     });
     
+}
+
+
+function list_income(){
+
+    let url = "income_list";
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        dataType: 'json'
+    }).done( function(data, status, xhr ){
+        console.log("done");
+
+        if(!data.error){
+            $("#income_list").html(data.content);
+        }else{
+            console.log("費目リストバリデーションエラー");
+        }
+
+    }).fail( function(xhr, status, error ){
+        console.log(status + ":" + error );
+    });    
 }
 

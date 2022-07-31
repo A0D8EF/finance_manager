@@ -1,0 +1,18 @@
+
+{% for expense_item in expense_items %}
+{% if expense_item.income %}
+<div class="border py-2">
+    <div class="income mx-2"><span>収入</span></div>
+    <div class="expense_item">{{ expense_item.name }}</div>
+</div>
+{% endif %}
+{% endfor %}
+
+{% for expense_item in expense_items %}
+{% if not expense_item.income %}
+<div class="border py-2">
+    <div class="outgo mx-2">支出</div>
+    <div class="expense_item">{{ expense_item.name }}</div>
+</div>
+{% endif %}
+{% endfor %}
