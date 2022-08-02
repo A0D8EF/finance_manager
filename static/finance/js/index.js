@@ -25,6 +25,8 @@ window.addEventListener("load", function (){
         $("#modal_sw").prop("checked", false);
     })
 
+    $(".trash").on("click", function() { trash( $(this).val() ); });
+
 });
 
 function change_expense_item(income){
@@ -104,3 +106,21 @@ function list_income(){
     });    
 }
 
+function trash(id){
+
+    let url = DELETE_URL.replace("1", id);
+
+    $.ajax({
+        url: url,
+        type: "POST",
+        dataType: 'json'
+    }).done( function(data, status, xhr){
+        if(data.error){
+            console.log("ERROR");
+        }else{
+            location.reload();
+        }
+    }).fail( function(xhr, status, error){
+        console.log(status + ":" + error );
+    });
+}

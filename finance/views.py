@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import AccessMixin
 from .models import ExpenseItem, Balance
 from .forms import BalanceForm, IncomeForm, ExpenseItemForm, YearMonthForm
 
+import datetime
 from . import calender
 
 from django.http.response import JsonResponse
@@ -64,19 +65,27 @@ class IndexView(LoginRequiredMixin, View):
         context["months"]    = [ i for i in range(1,13) ]
 
         form    = YearMonthForm(request.GET)
+        today   = datetime.date.today()
 
         if form.is_valid():
             cleaned = form.clean()
 
+            selected_date   = datetime.date(year=cleaned["year"], month=cleaned["month"], day=1)
+        else:
+            selected_date   = datetime.date(year=today.year, month=today.month, day=1)
 
+        context["selected_date"] = selected_date
+
+        context["years"]                                = calender.create_years(request, selected_date)
+        context["next_month"], context["last_month"]    = calender.create_months(selected_date)
+       
         # context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
         context["balances"]         = Balance.objects.filter(user=request.user.id).order_by("-use_date")
 
-        context["monthly_balances"] = self.monthly_calc( Balance.objects.filter(user=request.user.id, use_date__year=2022).order_by("-use_date"))
+        context["monthly_balances"] = self.monthly_calc( Balance.objects.filter(user=request.user.id, use_date__year=selected_date.year).order_by("-use_date"))
         # models.DateField のフィールド名に __year で年を取り出す
-        # TODO: ユーザーが入力した年（カレンダーで選択されている月？）の集計をできるように
 
-        context["calender"]       = calender.create_calender(2022, 7)
+        context["calender"]       = calender.create_calender(selected_date.year, selected_date.month)
 
         return render(request, "finance/index.html", context)
     
@@ -98,8 +107,23 @@ class IndexView(LoginRequiredMixin, View):
 
         return redirect("finance:index")
 
-
 index = IndexView.as_view()
+
+
+class DeleteView(LoginRequiredMixin, View):
+
+    def post(self, request, pk, *args, **kwargs):
+
+        data    = { "error": True }
+
+        balance = Balance.objects.filter(user=request.user.id, id=pk).first()
+        if balance:
+            balance.delete()
+            data["error"] = False
+
+        return JsonResponse(data)
+
+delete = DeleteView.as_view()
 
 
 class IncomeView(LoginRequiredMixin, View):
@@ -146,7 +170,6 @@ class IncomeView(LoginRequiredMixin, View):
 
         return JsonResponse(data)
 
-
 income = IncomeView.as_view()
 
 
@@ -173,34 +196,3 @@ class IncomeListView(LoginRequiredMixin, View):
         return JsonResponse(data)
 
 income_list = IncomeListView.as_view()
-
-
-class ExpenseItemView(LoginRequiredMixin, View):
-
-    def get(self, request, *args, **kwargs):
-
-        context                 = {}
-        context["expense_items"] = ExpenseItem.objects.filter(user=request.user.id)
-
-        return render(request, "finance/add_expense_item.html", context)
-
-    def post(self, request, *args, **kwargs):
-        
-        copied          = request.POST.copy()
-        copied["user"]  = request.user.id
-
-        form    = ExpenseItemForm(copied)
-
-        if not form.is_valid():
-            print("ExpenseItem: バリデーションNG")
-            print(form.errors)
-            return redirect("finance:income")
-
-        print("ExpenseItem: バリデーションOK")
-        form.save()
-
-        return redirect("finance:index")
-
-
-expense_item = ExpenseItemView.as_view()
-

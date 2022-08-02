@@ -13,6 +13,8 @@
 
 .tab_area {
     display: none;
+    height: 80vh;
+    overflow-y: auto;
     border: solid 0.1rem #288c66;
     margin-top: 0;
     padding: 1rem;
@@ -47,10 +49,28 @@
 
 
 /* tab1: calender */
-/* #tab_area_1 { text-align: center; } */
-#tab_area_1 > form {
+.calender_header {
+    display: flex;
+    width: 90%;
+    margin: 0 auto;
     text-align: center;
-    font-size: 1.5rem;
+    align-items: center;
+    justify-content: center;
+}
+.calender_link_area {
+    width: 3rem;
+    font-size: 2.5rem;
+}
+.calender_form_area {
+    width: calc(100% - 6rem);
+    font-size: 1.25rem;
+}
+.calender_form_area > input[type="submit"] {
+    color: white;
+    background-color: #288c66;
+    border: none;
+    border-radius: 0.2rem;
+    padding: 0 0.5rem;
 }
 .calender {
     width: 90%;
@@ -104,6 +124,10 @@
     height: 2rem;
     padding: 0.25rem 0.5rem;
     text-align: center;
+}
+.trash {
+    border: none;
+    background-color: white;
 }
 
 /* income toggle */

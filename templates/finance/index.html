@@ -7,7 +7,12 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
 
+    <script>
+        let DELETE_URL = "{% url 'finance:delete' 1 %}"
+    </script>
+
     <link rel="stylesheet" href="{% static 'finance/css/index.css' %}">
+    <script src="{% static 'finance/js/ajax.js' %}"></script>
     <script src="{% static 'finance/js/index.js' %}"></script>
 {% endblock %}
 
@@ -25,19 +30,32 @@
         
             <!-- カレンダー -->
             <div id="tab_area_1" class="tab_area">
-                <form action="" method="GET">
-                    <select name="year">
-                        <option value="2022">2022年</option>
-                    </select>
-                    <select name="month">
-                        {% for month in months %}
-                        <option value="{{ month }}">{{ month }}月</option>
-                        {% endfor %}
-                    </select>
-                </form>
+                
+                <div class="calender_header">
+                    <div class="calender_link_area">
+                        <a href="?year={{ last_month.year }}&month={{ last_month.month }}" style="color: #288c66;"><i class="fas fa-angle-left"></i></a>
+                    </div>
+                    
+                    <form class="calender_form_area" action="" method="GET">
+                        <select name="year">
+                            {% for year in years %}
+                            <option value="{{ year }}"  {% if year == selected_date.year %}selected{% endif %}>{{ year }}年</option>
+                            {% endfor %}
+                        </select>
+                        <select name="month">
+                            {% for month in months %}
+                            <option value="{{ month }}" {% if month == selected_date.month %}selected{% endif %}>{{ month }}月</option>
+                            {% endfor %}
+                        </select>
+                        <input type="submit" value="検索">
+                    </form>
+                    <div class="calender_link_area">
+                        <a href="?year={{ next_month.year }}&month={{ next_month.month }}" style="color: #288c66;"><i class="fas fa-angle-right"></i></a>
+                    </div>
+                </div>
                 <table class="calender">
-                    <thead>
-                        <tr class="calender_head">
+                    <thead class="calender_head">
+                        <tr>
                             <td>日</td>
                             <td>月</td>
                             <td>火</td>
@@ -67,13 +85,15 @@
             <!-- 収支一覧 -->
             <div id="tab_area_2" class="tab_area">
                 <table class="balance_list">
-                    <thead>
-                        <tr class="balance_list_head">
-                            <td>利用日</td>
-                            <td>収支</td>
-                            <td>費目</td>
-                            <td>金額</td>
-                            <td>備考</td>
+                    <thead class="balance_list_head">
+                        <tr>
+                            <th>利用日</th>
+                            <th>収支</th>
+                            <th>費目</th>
+                            <th>金額</th>
+                            <th>備考</th>
+                            <th></th>
+                            <th></th>
                         </tr>
                     </thead>
                     <tbody class="balance_list_body">
@@ -98,7 +118,7 @@
                             <td>{{ balance.description   }}</td>
                             {# TODO: 編集と削除機能の追加 #}
                             <td><a style="color:#288c66;"><i class="fas fa-pen"></i></a></td>
-                            <td><a style="color:#288c66;"><i class="fas fa-trash-alt"></i></a></td>
+                            <td><button class="trash" style="color:#288c66;" value="{{ balance.id }}"><i class="fas fa-trash-alt"></i></button></td>
                         </tr>
                         {% endfor %}
                     </tbody>
