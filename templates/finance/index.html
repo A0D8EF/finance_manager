@@ -84,45 +84,36 @@
         
             <!-- 収支一覧 -->
             <div id="tab_area_2" class="tab_area">
-                <table class="balance_list">
-                    <thead class="balance_list_head">
-                        <tr>
-                            <th>利用日</th>
-                            <th>収支</th>
-                            <th>費目</th>
-                            <th>金額</th>
-                            <th>備考</th>
-                            <th></th>
-                            <th></th>
-                        </tr>
-                    </thead>
-                    <tbody class="balance_list_body">
-                        {% for balance in balances %}
-                        <tr>
-                            <td>{{ balance.use_date }}</td>
-                            <td>
+                <div class="balance_list">
+                    {% for balance in balances %}
+                    {% if balance.use_date.year == selected_date.year and balance.use_date.month == selected_date.month %}
+                    <div>
+                        <div class="balance_list_date">{{ balance.use_date }}</div>
+                        <div class="balance_list_content">
+                            <div>
                                 {% if balance.expense_item.income %}
-                                <label style="background: #143cdb;">収入</label>
+                                <label class="income">収入</label>
                                 {% else %}
-                                <label style="background: crimson;">支出</label>
+                                <label class="outgo">支出</label>
                                 {% endif %}
-                            </td>
-                            <td>{{ balance.expense_item.name|default:"不明" }}</td>
-                            <td>
+                            </div>
+                            <div>{{ balance.expense_item.name|default:"不明" }}</div>
+                            <div>
                                 {% if balance.expense_item.income %}
-                                <span style="color: #143cdb;">{{ balance.amount|intcomma   }}</span>
+                                <span style="color: #143cdb; font-weight: bold;">{{ balance.amount|intcomma }}</span>
                                 {% else %}
-                                <span style="color: crimson;">{{ balance.amount|intcomma   }}</span>
+                                <span style="color: crimson; font-weight: bold;">{{ balance.amount|intcomma }}</span>
                                 {% endif %}
-                            </td>
-                            <td>{{ balance.description   }}</td>
-                            {# TODO: 編集と削除機能の追加 #}
-                            <td><a style="color:#288c66;"><i class="fas fa-pen"></i></a></td>
-                            <td><button class="trash" style="color:#288c66;" value="{{ balance.id }}"><i class="fas fa-trash-alt"></i></button></td>
-                        </tr>
-                        {% endfor %}
-                    </tbody>
-                </table>
+                            </div>
+                            <div class="balance_list_icon">
+                                <a style="color:#288c66;"><i class="fas fa-pen"></i></a>
+                                <button class="trash" style="color:#288c66;" value="{{ balance.id }}"><i class="fas fa-trash-alt"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                </div>
                 <div class="add_balance">
                     <label class="modal_label" for="modal_chk" style="font-size:3rem; color:#288c66;">
                         <i class="fas fa-plus-circle"></i>

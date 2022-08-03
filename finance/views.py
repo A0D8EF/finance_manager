@@ -80,7 +80,7 @@ class IndexView(LoginRequiredMixin, View):
         context["next_month"], context["last_month"]    = calender.create_months(selected_date)
        
         # context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
-        context["balances"]         = Balance.objects.filter(user=request.user.id).order_by("-use_date")
+        context["balances"]         = Balance.objects.filter(user=request.user.id).order_by("use_date")
 
         context["monthly_balances"] = self.monthly_calc( Balance.objects.filter(user=request.user.id, use_date__year=selected_date.year).order_by("-use_date"))
         # models.DateField のフィールド名に __year で年を取り出す

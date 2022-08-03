@@ -5,7 +5,7 @@
 
 .index_flexbox > div {
     width: 50%;
-    padding: 2rem;
+    padding: 1rem;
 }
 
 /* tab system */
@@ -101,30 +101,42 @@
 /* tab2: balance list */
 .balance_list {
     width: 100%;
-    text-align: center;
+    height: 40vh;
+    overflow-y: auto;
+    border: solid 0.1rem darkgray;
 }
-.balance_list td { padding: 0.5rem; }
-.balance_list_head {
-    font-weight: bold;
-    border-bottom: solid 0.2rem black;
-}
-.balance_list_body td {
+.balance_list > div {
+    width: 100%;
+    padding: 0.25rem 0;
+    margin: 0 auto;
     border-bottom: solid 0.1rem darkgray;
-}
-.balance_list_body td:nth-child(2) { width: 4rem; }
-.balance_list_body td:nth-child(4) { text-align:right ; }
-.balance_list_body td:nth-child(6) { width: 1rem; }
-.balance_list_body td:nth-child(7) { width: 1rem; }
+    
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
 
-.balance_list_body td:nth-child(2) > label {
-    font-weight: bold;
-    color: white;
-    border-radius: 4px;
-    width: 3rem;
-    height: 2rem;
-    padding: 0.25rem 0.5rem;
+    flex-wrap: wrap;
+}
+.balance_list_date{
+    width: 25%;
+    min-width: 8rem;
     text-align: center;
 }
+.balance_list_content{
+    flex: 1;
+    min-width: 17rem;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.balance_list_content div:nth-child(2){ width: 5rem; text-align: center; }
+.balance_list_content div:nth-child(3){ width: 5rem; text-align: right;}
+.balance_list_icon {
+    width: 4rem;
+    padding-left: 1rem;
+    text-align: right;
+}
+
 .trash {
     border: none;
     background-color: white;
@@ -252,6 +264,17 @@ input[type="checkbox"].modal_chk:checked + .modal_body {
 
 
 @media (max-width:800px){
+    .index_flexbox {
+        display: block;
+        width: 100%;
+    }
+    
+    .index_flexbox > div {
+        width: 100%;
+        padding: 1rem;
+    }
+
+    /* modal dialog */
     .modal_content{
         padding: 1rem;
     }
