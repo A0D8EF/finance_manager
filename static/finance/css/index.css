@@ -60,6 +60,11 @@
 .calender_link_area {
     width: 3rem;
     font-size: 2.5rem;
+    cursor: pointer;
+}
+.calender_link_angle{
+    cursor: pointer;
+    color: #288c66;
 }
 .calender_form_area {
     width: calc(100% - 6rem);
@@ -100,10 +105,11 @@
 
 /* tab2: balance list */
 .balance_list {
-    width: 100%;
-    height: 40vh;
+    width: 90%;
+    max-height: 50vh;
     overflow-y: auto;
-    border: solid 0.1rem darkgray;
+    margin: 1rem auto 0;
+    border: solid 0.2rem black;
 }
 .balance_list > div {
     width: 100%;
@@ -238,7 +244,11 @@ input[type="checkbox"].modal_chk:checked + .modal_body {
 }
 
 /* 費目一覧 */
-.border > div {
+#income_list {
+    max-height: 40vh;
+    overflow-y: auto;
+}
+.income_list_content > div {
     display: inline-block;
 }
 

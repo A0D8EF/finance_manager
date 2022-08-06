@@ -16,6 +16,20 @@ window.addEventListener("load", function (){
 
     flatpickr("#date", config_date);
 
+    const tab_radios = $(".tab_radio");
+    $(".tab_radio").on("change", (event) => {
+        for(let t of tab_radios) {
+            if( t.checked ){
+                document.cookie = "tab=" + decodeURIComponent(t.id);
+                document.cookie = "Path=/single";
+                document.cookie = "SameSite=strict"
+                // console.log(document.cookie);
+            }
+        }
+    });
+
+    set_tab();
+
     $("#income_chk").on("change", function(){ change_expense_item( $(this).prop("checked") ); });
     change_expense_item($("#income_chk").prop("checked"));
 
@@ -28,6 +42,29 @@ window.addEventListener("load", function (){
     $(".trash").on("click", function() { trash( $(this).val() ); });
 
 });
+
+function set_tab() {
+
+    let tab_id = "tab_radio_1";
+    const tab_radios = $(".tab_radio");
+    
+    let cookies         = document.cookie;
+    let cookiesArray    = cookies.split(';');
+    for(let c of cookiesArray) {
+        let cArray = c.split('=');
+        if( cArray[0].trim() === "tab"){
+            tab_id  = cArray[1];
+            console.log(tab_id);
+            break;
+        }
+    }
+    for(let t of tab_radios) {
+        if( t.id == tab_id ){
+            console.log("t.id: " + t.id + ", tab_id: " + tab_id);
+            t.checked = true;
+        }
+    }
+}
 
 function change_expense_item(income){
     console.log(income);
@@ -83,7 +120,6 @@ function add_income(){
     
 }
 
-
 function list_income(){
 
     let url = "income_list";
@@ -103,7 +139,7 @@ function list_income(){
 
     }).fail( function(xhr, status, error ){
         console.log(status + ":" + error );
-    });    
+    });
 }
 
 function trash(id){

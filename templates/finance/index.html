@@ -122,7 +122,7 @@
             </div>
 
             <!-- 月別収支 -->
-            <div id="tab_area_3" class="tab_area">                
+            <div id="tab_area_3" class="tab_area">             
                 {% for monthly_balance in monthly_balances %}
                 <div class="border">{{ monthly_balance.month }}月：{{ monthly_balance.amount|intcomma }}円</div>
                 {% endfor %}
@@ -184,28 +184,9 @@
                         </div>
                     </form>
                 </div>
-                <div>
+                <div style="margin-top: 1.5rem;">
                     <h2>費目一覧</h2>
-                    <div id="income_list">
-                        {% comment %}
-                        {% for expense_item in expense_items %}
-                        {% if expense_item.income %}
-                        <div class="border py-2">
-                            <div class="income mx-2"><span>収入</span></div>
-                            <div class="expense_item">{{ expense_item.name }}</div>
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-
-                        {% for expense_item in expense_items %}
-                        {% if not expense_item.income %}
-                        <div class="border py-2">
-                            <div class="outgo mx-2">支出</div>
-                            <div class="expense_item">{{ expense_item.name }}</div>
-                        </div>
-                        {% endif %}
-                        {% endfor %}
-                        {% endcomment %}
+                    <div id="income_list" class="border">
                     </div>
                 </div>
 
