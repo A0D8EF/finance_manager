@@ -78,6 +78,8 @@ INSTALLED_APPS = [
     
     "finance.apps.FinanceConfig",
 
+    "rest_framework",
+
     "django.contrib.sites",
     "allauth",
     "allauth.account",

@@ -138,12 +138,12 @@
 .balance_list_content div:nth-child(2){ width: 5rem; text-align: center; }
 .balance_list_content div:nth-child(3){ width: 5rem; text-align: right;}
 .balance_list_icon {
-    width: 4rem;
-    padding-left: 1rem;
+    width: 5rem;
+    padding-left: 0.5rem;
     text-align: right;
 }
 
-.trash {
+.trash, .edit {
     border: none;
     background-color: white;
 }
@@ -195,15 +195,15 @@ input[type="checkbox"].income_chk:checked + .income_label::before {
     cursor: pointer;
 }
 
-.modal_chk {
+.modal_chk, .edit_modal_chk {
     display: none;
 }
 
-.modal_body {
+.modal_body, .edit_modal_body {
     display: none;
 }
 
-.modal_bg {
+.modal_bg, .edit_modal_bg {
     position: fixed;
     top: 0;
     left: 0;
@@ -213,12 +213,12 @@ input[type="checkbox"].income_chk:checked + .income_label::before {
     cursor: pointer;
 }
 
-.modal_content {
+.modal_content, .edit_modal_content {
     position: fixed;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    width: 80%;
+    min-width: 80%;
     max-height: 80%;
     overflow-y: auto;
     background: white;
@@ -227,6 +227,9 @@ input[type="checkbox"].income_chk:checked + .income_label::before {
 }
 
 input[type="checkbox"].modal_chk:checked + .modal_body {
+    display: block;
+}
+input[type="checkbox"].edit_modal_chk:checked + .edit_modal_body {
     display: block;
 }
 

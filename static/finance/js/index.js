@@ -14,7 +14,7 @@ window.addEventListener("load", function (){
         defaultDate: date
     }
 
-    flatpickr("#date", config_date);
+    flatpickr(".date", config_date);
 
     const tab_radios = $(".tab_radio");
     $(".tab_radio").on("change", (event) => {
@@ -22,7 +22,7 @@ window.addEventListener("load", function (){
             if( t.checked ){
                 document.cookie = "tab=" + decodeURIComponent(t.id);
                 document.cookie = "Path=/single";
-                document.cookie = "SameSite=strict"
+                document.cookie = "SameSite=strict";
                 // console.log(document.cookie);
             }
         }
@@ -39,6 +39,25 @@ window.addEventListener("load", function (){
         $("#modal_sw").prop("checked", false);
     })
 
+    // balanceの新規登録
+    $(".modal_label[for='modal_chk']").on("click", function() {
+        $("#balance_form").prop("action", "");
+    });
+
+    // balanceの編集
+    $(".edit").on("click", function() {
+        // let pk  = $(this).val();
+        // let url = "/edit/" + pk + "/";
+
+        // $("#balance_form").prop("action", url);
+
+        let chk = "#edit_modal_chk_" + $(this).val();
+        console.log(chk);
+        $(chk).prop("checked", true);
+        edit( $(this).val() );
+    })
+
+    // balanceの削除
     $(".trash").on("click", function() { trash( $(this).val() ); });
 
 });
@@ -144,6 +163,10 @@ function list_income(){
 
 function trash(id){
 
+    if(!confirm("本当に削除しますか？")){
+        return false;
+    }
+
     let url = DELETE_URL.replace("1", id);
 
     $.ajax({
@@ -155,6 +178,26 @@ function trash(id){
             console.log("ERROR");
         }else{
             location.reload();
+        }
+    }).fail( function(xhr, status, error){
+        console.log(status + ":" + error );
+    });
+}
+
+function edit(id){
+
+    let url = EDIT_URL.replace("1", id);
+    console.log(url);
+
+    $.ajax({
+        url: url,
+        type: "GET",
+        dataType: 'json'
+    }).done( function(data, status, xhr){
+        if(!data.error){
+            $(".edit_modal_content").html(data.content);
+        }else{
+            console.log("EDIT ERROR");
         }
     }).fail( function(xhr, status, error){
         console.log(status + ":" + error );

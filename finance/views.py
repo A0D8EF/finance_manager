@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
-from django.views import View
+# from django.views import View
+from rest_framework.views import APIView as View
 
 from allauth.account.admin import EmailAddress
 from django.contrib.auth.mixins import AccessMixin
@@ -76,7 +77,7 @@ class IndexView(LoginRequiredMixin, View):
 
         context["selected_date"] = selected_date
 
-        context["years"]                                = calender.create_years(request, selected_date)
+        context["years"]                                = calender.create_years(request, selected_date, today)
         context["next_month"], context["last_month"]    = calender.create_months(selected_date)
        
         # context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
@@ -107,6 +108,16 @@ class IndexView(LoginRequiredMixin, View):
 
         return redirect("finance:index")
 
+    def delete(self, request, *args, **kwargs):
+        pass
+    
+    def put(self, request, *args, **kwargs):
+        pass
+        
+    def patch(self, request, *args, **kwargs):
+        pass
+
+
 index = IndexView.as_view()
 
 
@@ -124,6 +135,42 @@ class DeleteView(LoginRequiredMixin, View):
         return JsonResponse(data)
 
 delete = DeleteView.as_view()
+
+
+class EditView(LoginRequiredMixin, View):
+
+    def get(self, request, pk, *args, **kwargs):
+
+        data    = { "error": True }
+        
+        context     = {}
+        context["balance"]          = Balance.objects.filter(user=request.user.id, id=pk).first()
+        context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
+
+        data["error"]   = False
+        data["content"] = render_to_string("finance/edit.html", context, request)
+
+        return JsonResponse(data)
+
+    def post(self, request, pk, *args, **kwargs):
+
+        balance = Balance.objects.filter(user=request.user.id, id=pk).first()
+
+        copied          = request.POST.copy()
+        copied["user"]  = request.user.id
+
+        form    = BalanceForm(copied, instance=balance)
+
+        if not form.is_valid():
+            print("バリデーションNG")
+            print(form.errors)
+            return redirect("finance:index")
+        
+        form.save()
+
+        return redirect("finance:index")
+    
+edit    = EditView.as_view()
 
 
 class IncomeView(LoginRequiredMixin, View):

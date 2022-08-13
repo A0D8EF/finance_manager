@@ -8,7 +8,8 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
 
     <script>
-        let DELETE_URL = "{% url 'finance:delete' 1 %}"
+        let DELETE_URL  = "{% url 'finance:delete' 1 %}"
+        let EDIT_URL    = "{% url 'finance:edit' 1 %}"
     </script>
 
     <link rel="stylesheet" href="{% static 'finance/css/index.css' %}">
@@ -20,7 +21,11 @@
     
     <div class="index_flexbox">
         <div>
-            ここにサマリーを表示
+            {% for monthly_balance in monthly_balances %}
+            {% if monthly_balance.month == selected_date.month %}
+            {{ monthly_balance.month }}月の収支：{{ monthly_balance.amount|intcomma }}円
+            {% endif %}
+            {% endfor %}
         </div>
     
         <div>
@@ -30,29 +35,7 @@
         
             <!-- カレンダー -->
             <div id="tab_area_1" class="tab_area">
-                
-                <div class="calender_header">
-                    <div class="calender_link_area">
-                        <a href="?year={{ last_month.year }}&month={{ last_month.month }}" style="color: #288c66;"><i class="fas fa-angle-left"></i></a>
-                    </div>
-                    
-                    <form class="calender_form_area" action="" method="GET">
-                        <select name="year">
-                            {% for year in years %}
-                            <option value="{{ year }}"  {% if year == selected_date.year %}selected{% endif %}>{{ year }}年</option>
-                            {% endfor %}
-                        </select>
-                        <select name="month">
-                            {% for month in months %}
-                            <option value="{{ month }}" {% if month == selected_date.month %}selected{% endif %}>{{ month }}月</option>
-                            {% endfor %}
-                        </select>
-                        <input type="submit" value="検索">
-                    </form>
-                    <div class="calender_link_area">
-                        <a href="?year={{ next_month.year }}&month={{ next_month.month }}" style="color: #288c66;"><i class="fas fa-angle-right"></i></a>
-                    </div>
-                </div>
+                {% include "finance/calender_header.html" %}
                 <table class="calender">
                     <thead class="calender_head">
                         <tr>
@@ -84,6 +67,7 @@
         
             <!-- 収支一覧 -->
             <div id="tab_area_2" class="tab_area">
+                {% include "finance/calender_header.html" %}
                 <div class="balance_list">
                     {% for balance in balances %}
                     {% if balance.use_date.year == selected_date.year and balance.use_date.month == selected_date.month %}
@@ -106,8 +90,15 @@
                                 {% endif %}
                             </div>
                             <div class="balance_list_icon">
-                                <a style="color:#288c66;"><i class="fas fa-pen"></i></a>
+                                <button class="edit" style="color:#288c66;" value="{{ balance.id }}"><i class="fas fa-pen"></i></button>
                                 <button class="trash" style="color:#288c66;" value="{{ balance.id }}"><i class="fas fa-trash-alt"></i></button>
+
+                                <input id="edit_modal_chk_{{ balance.id }}" class="edit_modal_chk" type="checkbox">
+                                <div class="edit_modal_body">
+                                    <label class="edit_modal_bg" for="edit_modal_chk_{{ balance.id }}"></label>
+                                    <div class="edit_modal_content">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -122,7 +113,8 @@
             </div>
 
             <!-- 月別収支 -->
-            <div id="tab_area_3" class="tab_area">             
+            <div id="tab_area_3" class="tab_area">
+                {{ selected_date.year }}年の月別収支
                 {% for monthly_balance in monthly_balances %}
                 <div class="border">{{ monthly_balance.month }}月：{{ monthly_balance.amount|intcomma }}円</div>
                 {% endfor %}
@@ -139,11 +131,11 @@
             <input id="modal_sw" class="modal_chk" type="checkbox">
 
             <div class="modal_balance">
-                <h2>登録</h2>    
-                <form method="POST">
+                <h2>登録</h2>
+                <form id="balance_form" method="POST">
                     {% csrf_token %}
             
-                    <input id="date" class="form-control my-2" name="use_date">
+                    <input class="date" class="form-control my-2" name="use_date">
     
                     <div class="form-inline my-2">
                         <input id="income_chk" class="income_chk" name="income" type="checkbox">

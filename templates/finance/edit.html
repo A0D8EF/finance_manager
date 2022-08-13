@@ -1,0 +1,31 @@
+<h2>編集</h2>
+<form id="edit_form" method="POST" action="{% url 'finance:edit' balance.id %}">
+    {% csrf_token %}
+
+    <input class="date" class="form-control my-2" name="use_date" value="{{ balance.use_date|date:'Y-m-d' }}">
+
+    <div class="form-inline my-2">
+        <input id="income_chk_{{ balance.id }}" class="income_chk" name="income" type="checkbox" {% if balance.expense_item.income %}checked{% endif %}>
+        <label for="income_chk_{{ balance.id }}" class="income_label mr-2"></label>
+
+        <select class="form-control mr-2" name="expense_item" required>
+            {% for expense_item in expense_items %}
+            <option value="{{ expense_item.id }}" {% if balance.expense_item.id == expense_item.id %}selected{% endif %}>{{ expense_item.name }}</option>
+            {% endfor %}
+        </select>
+        {% comment %}
+        <label class="modal_label" for="modal_sw" style="font-size:2rem; color:#288c66;">
+            <i class="fas fa-plus-circle"></i>
+        </label>
+        {% endcomment %}
+    </div>
+
+    <input class="form-control my-2" type="number" name="amount" value="{{ balance.amount }}" min="0" required>
+    
+    <textarea class="form-control my-2" name="description" value="{{ balance.description }}" placeholder="備考"></textarea>
+
+    <div class="form-row my-2">
+        <input class="col-sm-6 btn btn-primary" class="submit_edit" type="submit" value="登録">
+        <label class="col-sm-6 btn btn-danger my-0" for="edit_modal_chk_{{ balance.id }}">キャンセル</label>
+    </div>
+</form>
