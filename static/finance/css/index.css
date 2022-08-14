@@ -218,7 +218,7 @@ input[type="checkbox"].income_chk:checked + .income_label::before {
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
-    min-width: 80%;
+    width: 80%;
     max-height: 80%;
     overflow-y: auto;
     background: white;

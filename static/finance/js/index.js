@@ -46,13 +46,7 @@ window.addEventListener("load", function (){
 
     // balanceの編集
     $(".edit").on("click", function() {
-        // let pk  = $(this).val();
-        // let url = "/edit/" + pk + "/";
-
-        // $("#balance_form").prop("action", url);
-
         let chk = "#edit_modal_chk_" + $(this).val();
-        console.log(chk);
         $(chk).prop("checked", true);
         edit( $(this).val() );
     })
@@ -196,6 +190,15 @@ function edit(id){
     }).done( function(data, status, xhr){
         if(!data.error){
             $(".edit_modal_content").html(data.content);
+
+            let date_id = "#date_" + id;
+            let date    = $(date_id).val();
+            let config_date = {
+                locale: "ja",
+                dateFormat: "Y-m-d",
+                defaultDate: date
+            }
+            flatpickr(date_id, config_date);
         }else{
             console.log("EDIT ERROR");
         }

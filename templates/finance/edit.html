@@ -2,7 +2,7 @@
 <form id="edit_form" method="POST" action="{% url 'finance:edit' balance.id %}">
     {% csrf_token %}
 
-    <input class="date" class="form-control my-2" name="use_date" value="{{ balance.use_date|date:'Y-m-d' }}">
+    <input id="date_{{ balance.id }}" class="form-control my-2" name="use_date" value="{{ balance.use_date|date:'Y-m-d' }}">
 
     <div class="form-inline my-2">
         <input id="income_chk_{{ balance.id }}" class="income_chk" name="income" type="checkbox" {% if balance.expense_item.income %}checked{% endif %}>
@@ -25,7 +25,7 @@
     <textarea class="form-control my-2" name="description" value="{{ balance.description }}" placeholder="備考"></textarea>
 
     <div class="form-row my-2">
-        <input class="col-sm-6 btn btn-primary" class="submit_edit" type="submit" value="登録">
+        <input class="col-sm-6 btn btn-primary" class="edit_submit" type="submit" value="登録">
         <label class="col-sm-6 btn btn-danger my-0" for="edit_modal_chk_{{ balance.id }}">キャンセル</label>
     </div>
 </form>
