@@ -98,6 +98,12 @@
     font-weight: bold;
     border-bottom: double 0.2rem black;
 }
+.create_day_balance {
+    cursor: pointer;
+}
+.create_day_balance:hover {
+    text-decoration: underline;
+}
 .add_balance {
     text-align: right;
     padding-right: 0.5rem;
@@ -146,6 +152,8 @@
 .trash, .edit {
     border: none;
     background-color: white;
+    color: #288c66;
+    cursor: pointer;
 }
 
 /* income toggle */

@@ -80,7 +80,7 @@ class IndexView(LoginRequiredMixin, View):
         context["years"]                                = calender.create_years(request, selected_date, today)
         context["next_month"], context["last_month"]    = calender.create_months(selected_date)
        
-        # context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
+        context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
         context["balances"]         = Balance.objects.filter(user=request.user.id).order_by("use_date")
 
         context["monthly_balances"] = self.monthly_calc( Balance.objects.filter(user=request.user.id, use_date__year=selected_date.year).order_by("-use_date"))
@@ -109,10 +109,43 @@ class IndexView(LoginRequiredMixin, View):
         return redirect("finance:index")
 
     def delete(self, request, *args, **kwargs):
-        pass
+        
+        data    = { "error": True }
+
+        if "pk" not in kwargs:
+            return JsonResponse(data)
+
+        balance = Balance.objects.filter(user=request.user.id, id=kwargs["pk"]).first()
+        if balance:
+            balance.delete()
+            data["error"] = False
+
+        return JsonResponse(data)
     
     def put(self, request, *args, **kwargs):
-        pass
+        
+        data    = { "error": True }
+
+        if "pk" not in kwargs:
+            return JsonResponse(data)
+
+        balance         = Balance.objects.filter(user=request.user.id, id=kwargs["pk"]).first()
+
+        copied          = request.POST.copy()
+        copied["user"]  = request.user.id
+
+        form            = BalanceForm(copied, instance=balance)
+
+        if not form.is_valid():
+            print("バリデーションNG")
+            print(form.errors)
+            return JsonResponse(data)
+        
+        form.save()
+        data["error"]   = False
+
+        return JsonResponse(data)
+
         
     def patch(self, request, *args, **kwargs):
         pass
@@ -120,7 +153,7 @@ class IndexView(LoginRequiredMixin, View):
 
 index = IndexView.as_view()
 
-
+"""
 class DeleteView(LoginRequiredMixin, View):
 
     def post(self, request, pk, *args, **kwargs):
@@ -135,7 +168,6 @@ class DeleteView(LoginRequiredMixin, View):
         return JsonResponse(data)
 
 delete = DeleteView.as_view()
-
 
 class EditView(LoginRequiredMixin, View):
 
@@ -171,7 +203,7 @@ class EditView(LoginRequiredMixin, View):
         return redirect("finance:index")
     
 edit    = EditView.as_view()
-
+"""
 
 class IncomeView(LoginRequiredMixin, View):
 

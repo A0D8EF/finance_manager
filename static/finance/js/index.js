@@ -1,20 +1,18 @@
 window.addEventListener("load", function (){
 
     let today   = new Date();
-
     let year    = String(today.getFullYear());
     let month   = ("0" + String(today.getMonth() + 1)).slice(-2);
     let day     = ("0" + String(today.getDate())).slice(-2);
 
     let date    = year + "-" + month + "-" + day;
-
     let config_date = {
         locale: "ja",
         dateFormat: "Y-m-d",
         defaultDate: date
     }
 
-    flatpickr(".date", config_date);
+    $(".modal_label").on("click", function(){ flatpickr(".date", config_date); });
 
     const tab_radios = $(".tab_radio");
     $(".tab_radio").on("change", (event) => {
@@ -30,8 +28,8 @@ window.addEventListener("load", function (){
 
     set_tab();
 
-    $("#income_chk").on("change", function(){ change_expense_item( $(this).prop("checked") ); });
-    change_expense_item($("#income_chk").prop("checked"));
+    $(".income_chk").on("change", function(){ change_expense_item( $(this).prop("checked"), $(this).val() ); });
+    change_expense_item($("#income_chk").prop("checked"), $("#income_chk").val() );
 
     $("#add_income").on("click", function() { add_income(); });
     $("#modal_sw").on("click", function() { list_income(); });
@@ -45,15 +43,13 @@ window.addEventListener("load", function (){
     });
 
     // balanceの編集
-    $(".edit").on("click", function() {
-        let chk = "#edit_modal_chk_" + $(this).val();
-        $(chk).prop("checked", true);
-        edit( $(this).val() );
-    })
+    $(".edit_modal_chk").prop("checked", false);
+    $(".submit_edit").on("click", function() { edit( $(this).val() ); });
 
     // balanceの削除
     $(".trash").on("click", function() { trash( $(this).val() ); });
 
+    $(".create_day_balance").on("click", function() { create_day_balance($(this).text()) });
 });
 
 function set_tab() {
@@ -79,7 +75,7 @@ function set_tab() {
     }
 }
 
-function change_expense_item(income){
+function change_expense_item(income, id){
     console.log(income);
 
     url = "income/?income=" + String(income);
@@ -94,7 +90,7 @@ function change_expense_item(income){
         console.log("done");
 
         if(!data.error){
-            $("[name='expense_item']").html(data.content);
+            $("#expense_item_" + id).html(data.content);
         }else{
             console.log("費目フラグバリデーションエラー");
         }
@@ -162,16 +158,17 @@ function trash(id){
     }
 
     let url = DELETE_URL.replace("1", id);
+    console.log(url);
 
     $.ajax({
         url: url,
-        type: "POST",
+        type: "DELETE",
         dataType: 'json'
     }).done( function(data, status, xhr){
-        if(data.error){
-            console.log("ERROR");
-        }else{
+        if(!data.error){
             location.reload();
+        }else{
+            console.log("DELETE ERROR");
         }
     }).fail( function(xhr, status, error){
         console.log(status + ":" + error );
@@ -180,17 +177,19 @@ function trash(id){
 
 function edit(id){
 
-    let url = EDIT_URL.replace("1", id);
-    console.log(url);
+    let form_elem   = "#edit_form_" + id;
+    let data        = new FormData( $(form_elem).get(0) );
+    let url         = $(form_elem).prop("action");
 
     $.ajax({
         url: url,
-        type: "GET",
+        type: "PUT",
+        data: data,
+        processData: false,
+        contentType: false,
         dataType: 'json'
     }).done( function(data, status, xhr){
         if(!data.error){
-            $(".edit_modal_content").html(data.content);
-
             let date_id = "#date_" + id;
             let date    = $(date_id).val();
             let config_date = {
@@ -199,10 +198,31 @@ function edit(id){
                 defaultDate: date
             }
             flatpickr(date_id, config_date);
+            location.reload();
         }else{
             console.log("EDIT ERROR");
         }
     }).fail( function(xhr, status, error){
         console.log(status + ":" + error );
     });
+}
+
+function create_day_balance(calender_day){
+    let year    = $("[name='year'] option:selected").val();
+    let month   = $("[name='month'] option:selected").val();
+
+    month       = ("0" + String(month)).slice(-2);
+    let day     = ("0" + String(calender_day)).slice(-2);
+    
+    let date    = year + "-" + month + "-" + day;
+
+    let config_date = {
+        locale: "ja",
+        dateFormat: "Y-m-d",
+        defaultDate: date
+    }
+
+    flatpickr(".date", config_date);
+    $("#modal_chk").prop("checked", true);
+
 }

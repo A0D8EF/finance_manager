@@ -1,16 +1,19 @@
 <h2>編集</h2>
-<form id="edit_form" method="POST" action="{% url 'finance:edit' balance.id %}">
+<form id="edit_form_{{ balance.id }}" action="{% url 'finance:index_single' balance.id %}">
     {% csrf_token %}
 
-    <input id="date_{{ balance.id }}" class="form-control my-2" name="use_date" value="{{ balance.use_date|date:'Y-m-d' }}">
+    <input class="date_{{ balance.id }} form-control my-2" name="use_date" value="{{ balance.use_date|date:'Y-m-d' }}">
 
     <div class="form-inline my-2">
-        <input id="income_chk_{{ balance.id }}" class="income_chk" name="income" type="checkbox" {% if balance.expense_item.income %}checked{% endif %}>
+        <input id="income_chk_{{ balance.id }}" class="income_chk" name="income" type="checkbox" {% if balance.expense_item.income %}checked{% endif %} value="{{ balance.id }}">
         <label for="income_chk_{{ balance.id }}" class="income_label mr-2"></label>
 
-        <select class="form-control mr-2" name="expense_item" required>
+        <select id="expense_item_{{ balance.id }}" class="form-control mr-2" name="expense_item" required>
+            <option value="" selected hidden>費目を選んでください</option>
             {% for expense_item in expense_items %}
+            {% if expense_item.income == balance.expense_item.income %}
             <option value="{{ expense_item.id }}" {% if balance.expense_item.id == expense_item.id %}selected{% endif %}>{{ expense_item.name }}</option>
+            {% endif %}
             {% endfor %}
         </select>
         {% comment %}
@@ -25,7 +28,7 @@
     <textarea class="form-control my-2" name="description" value="{{ balance.description }}" placeholder="備考"></textarea>
 
     <div class="form-row my-2">
-        <input class="col-sm-6 btn btn-primary" class="edit_submit" type="submit" value="登録">
+        <button class="col-sm-6 btn btn-primary submit_edit" type="button" value="{{ balance.id }}">編集</button>
         <label class="col-sm-6 btn btn-danger my-0" for="edit_modal_chk_{{ balance.id }}">キャンセル</label>
     </div>
 </form>
