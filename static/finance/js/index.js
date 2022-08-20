@@ -63,38 +63,29 @@ function set_tab() {
         let cArray = c.split('=');
         if( cArray[0].trim() === "tab"){
             tab_id  = cArray[1];
-            console.log(tab_id);
             break;
         }
     }
     for(let t of tab_radios) {
         if( t.id == tab_id ){
-            console.log("t.id: " + t.id + ", tab_id: " + tab_id);
             t.checked = true;
         }
     }
 }
 
 function change_expense_item(income, id){
-    console.log(income);
-
     url = "income/?income=" + String(income);
-
-    console.log(url);
 
     $.ajax({
         url: url,
         type: "GET",
         dataType: 'json'
     }).done( function(data, status, xhr ){
-        console.log("done");
-
         if(!data.error){
             $("#expense_item_" + id).html(data.content);
         }else{
             console.log("費目フラグバリデーションエラー");
         }
-
     }).fail( function(xhr, status, error ){
         console.log(status + ":" + error );
     });

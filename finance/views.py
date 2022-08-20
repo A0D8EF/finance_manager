@@ -38,6 +38,8 @@ class IndexView(LoginRequiredMixin, View):
             dic             = {}
             dic["month"]    = i
             dic["amount"]   = 0
+            dic["income"]   = 0
+            dic["spending"] = 0
 
             data.append(dic)
         
@@ -52,8 +54,10 @@ class IndexView(LoginRequiredMixin, View):
                 
                 if income:
                     d["amount"] += amount
+                    d["income"] += amount
                 else:
                     d["amount"] -= amount
+                    d["spending"] += amount
                 
                 break
         

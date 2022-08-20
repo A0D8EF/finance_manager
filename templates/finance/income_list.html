@@ -11,7 +11,7 @@
 {% for expense_item in expense_items %}
 {% if not expense_item.income %}
 <div class="income_list_content border py-2">
-    <div class="outgo mx-2">支出</div>
+    <div class="spending mx-2">支出</div>
     <div class="expense_item">{{ expense_item.name }}</div>
 </div>
 {% endif %}

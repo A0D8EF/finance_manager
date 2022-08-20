@@ -22,15 +22,38 @@
     
     <div class="index_flexbox">
         <div>
-            {% for monthly_balance in monthly_balances %}
-            {% if monthly_balance.month == selected_date.month %}
-            {{ monthly_balance.month }}月の収支：{{ monthly_balance.amount|intcomma }}円
-            {% endif %}
-            {% endfor %}
-
-            <div>
-                <canvas id="income_graph"></canvas>
-                <canvas id="outgo_graph"></canvas>
+            <div id="summary">
+                {% for monthly_balance in monthly_balances %}
+                {% if monthly_balance.month == selected_date.month %}
+                {{ monthly_balance.month }}月の収支：
+                <span {% if monthly_balance.amount >= 0 %}style="color:#143cdb"{% else %}style="color:crimson"{% endif %}>{{ monthly_balance.amount|intcomma }}円</span>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <div id="summary_graph">
+                <input type="radio" name="summary_tab" id="summary_tab_radio_1" class="summary_tab_radio"><label for="summary_tab_radio_1" class="summary_tab_label">収入</label>
+                <input type="radio" name="summary_tab" id="summary_tab_radio_2" class="summary_tab_radio" checked><label for="summary_tab_radio_2" class="summary_tab_label">支出</label>
+                
+                <div id="summary_tab_area_1" class="summary_tab_area">
+                    <div>
+                        {% for monthly_balance in monthly_balances %}
+                        {% if monthly_balance.month == selected_date.month %}
+                        収入：{{ monthly_balance.income|intcomma }}円
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <canvas id="income_graph"></canvas>
+                </div>
+                <div id="summary_tab_area_2" class="summary_tab_area">
+                    <div>
+                        {% for monthly_balance in monthly_balances %}
+                        {% if monthly_balance.month == selected_date.month %}
+                        支出：{{ monthly_balance.spending|intcomma }}円
+                        {% endif %}
+                        {% endfor %}
+                    </div>
+                    <canvas id="outgo_graph"></canvas>
+                </div>
             </div>
         </div>
     
@@ -84,7 +107,7 @@
                                 {% if balance.expense_item.income %}
                                 <label class="income">収入</label>
                                 {% else %}
-                                <label class="outgo">支出</label>
+                                <label class="spending">支出</label>
                                 {% endif %}
                             </div>
                             <div>{{ balance.expense_item.name|default:"不明" }}</div>
