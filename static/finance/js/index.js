@@ -49,7 +49,7 @@ window.addEventListener("load", function (){
     // balanceの削除
     $(".trash").on("click", function() { trash( $(this).val() ); });
 
-    $(".create_day_balance").on("click", function() { create_day_balance($(this).text()) });
+    $(".create_day_balance").on("click", function() { create_day_balance( $(this).data("day") ); });
 });
 
 function set_tab() {

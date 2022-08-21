@@ -9,7 +9,7 @@ from .models import ExpenseItem, Balance
 from .forms import BalanceForm, IncomeForm, ExpenseItemForm, YearMonthForm
 
 import datetime
-from . import calender
+from . import calender, calc
 
 from django.http.response import JsonResponse
 from django.template.loader import render_to_string
@@ -29,40 +29,6 @@ class LoginRequiredMixin(AccessMixin):
 
 
 class IndexView(LoginRequiredMixin, View):
-
-    def monthly_calc(self, balances):
-
-        data    = []
-
-        for i in range(1,13):
-            dic             = {}
-            dic["month"]    = i
-            dic["amount"]   = 0
-            dic["income"]   = 0
-            dic["spending"] = 0
-
-            data.append(dic)
-        
-        for balance in balances:
-            month   = balance.use_date.month
-            income  = balance.expense_item.income
-            amount  = balance.amount
-
-            for d in data:
-                if d["month"] != month:
-                    continue
-                
-                if income:
-                    d["amount"] += amount
-                    d["income"] += amount
-                else:
-                    d["amount"] -= amount
-                    d["spending"] += amount
-                
-                break
-        
-        return data
-
 
     def get(self, request, *args, **kwargs):
 
@@ -87,7 +53,8 @@ class IndexView(LoginRequiredMixin, View):
         context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
         context["balances"]         = Balance.objects.filter(user=request.user.id).order_by("use_date")
 
-        context["monthly_balances"] = self.monthly_calc( Balance.objects.filter(user=request.user.id, use_date__year=selected_date.year).order_by("-use_date"))
+        context["monthly_balances"] = calc.monthly_calc( Balance.objects.filter(user=request.user.id, use_date__year=selected_date.year).order_by("-use_date") )
+        context["daily_balances"]   = calc.daily_calc( Balance.objects.filter(user=request.user.id, use_date__year=selected_date.year, use_date__month=selected_date.month).order_by("-use_date") )
         # models.DateField のフィールド名に __year で年を取り出す
 
         context["calender"]       = calender.create_calender(selected_date.year, selected_date.month)

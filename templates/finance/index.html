@@ -81,7 +81,16 @@
                         {% for week in calender %}
                         <tr>
                             {% for date in week %}
-                            <td class="create_day_balance">{{ date.day }}</td>
+                            <td class="create_day_balance" data-day="{{ date.day }}">
+                                <div class="calender_day">{{ date.day }}</div>
+                                {% for daily_balance in daily_balances %}
+                                {% if daily_balance.day == date.day %}
+                                <div class="day_balance" {% if daily_balance.amount > 0 %}style="color:#143cdb"{% elif daily_balance.amount < 0 %}style="color:crimson"{% else %}style="color:black"{% endif %}>
+                                    {{ daily_balance.amount|intcomma }}
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                            </td>
                             {% endfor %}
                         </tr>
                         {% endfor %}
@@ -113,9 +122,9 @@
                             <div>{{ balance.expense_item.name|default:"不明" }}</div>
                             <div>
                                 {% if balance.expense_item.income %}
-                                <span style="color: #143cdb; font-weight: bold;">{{ balance.amount|intcomma }}</span>
+                                <span style="color: #143cdb; font-weight: bold;">&yen;{{ balance.amount|intcomma }}</span>
                                 {% else %}
-                                <span style="color: crimson; font-weight: bold;">{{ balance.amount|intcomma }}</span>
+                                <span style="color: crimson; font-weight: bold;">&yen;{{ balance.amount|intcomma }}</span>
                                 {% endif %}
                             </div>
                             <div class="balance_list_icon">

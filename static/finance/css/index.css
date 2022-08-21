@@ -92,8 +92,7 @@
 #tab_radio_2:checked ~ #tab_area_2 { display: block; }
 #tab_radio_3:checked ~ #tab_area_3 { display: block; }
 
-
-/* tab1: calender */
+/* calender_header */
 .calender_header {
     display: flex;
     width: 90%;
@@ -122,17 +121,20 @@
     border-radius: 0.2rem;
     padding: 0 0.5rem;
 }
+
+/* tab1: calender */
 .calender {
-    width: 90%;
+    width: 95%;
     text-align: center;
     font-size: 1.5rem;
     border: solid 0.2rem black;
     margin: 1rem auto 0;
 }
 .calender td {
-    padding: 0.5rem;
     border: solid 0.1rem black;
+    position: relative;
 }
+.calender_head > tr > td { padding: 0.5rem; }
 .calender td:nth-child(1) {
     color: crimson;
 }
@@ -144,11 +146,25 @@
     border-bottom: double 0.2rem black;
 }
 .create_day_balance {
+    padding: 0.2rem 0 0.8rem 0;
     cursor: pointer;
+}
+.calender_day {
+    margin: 0.2rem 0.2rem;
+    text-align: left;
+    font-size: 0.8rem;
+}
+.day_balance {
+    width: 4rem;
+    margin: 0 auto;
+    text-align: center;
+    font-size: 1rem;
 }
 .create_day_balance:hover {
     text-decoration: underline;
+    background-color: #eee;
 }
+
 .add_balance {
     text-align: right;
     padding-right: 0.5rem;
@@ -156,7 +172,7 @@
 
 /* tab2: balance list */
 .balance_list {
-    width: 90%;
+    width: 95%;
     max-height: 50vh;
     overflow-y: auto;
     margin: 1rem auto 0;
@@ -189,7 +205,7 @@
 .balance_list_content div:nth-child(2){ width: 5rem; text-align: center; }
 .balance_list_content div:nth-child(3){ width: 5rem; text-align: right;}
 .balance_list_icon {
-    width: 5rem;
+    width: 4rem;
     padding-left: 0.5rem;
     text-align: right;
 }
@@ -337,7 +353,7 @@ input[type="checkbox"].edit_modal_chk:checked + .edit_modal_body {
     
     .index_flexbox > div:nth-child(1), .index_flexbox > div:nth-child(2) {
         width: 100%;
-        padding: 1rem;
+        padding: 0.5rem;
     }
 
     /* modal dialog */
