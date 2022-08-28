@@ -1,23 +1,31 @@
-def monthly_calc(balances):
+"""
+def monthly_calc(balances, selected_date):
 
         data    = []
 
-        for i in range(1,13):
+        for i in range(0,12):
             dic             = {}
-            dic["month"]    = i
+            dic["year"]     = int(selected_date.year)
+            dic["month"]    = int(selected_date.month)-i
+            if dic["month"] < 1:
+                dic["year"]  = int(selected_date.year)-1
+                dic["month"] = 12 + dic["month"]
             dic["amount"]   = 0
             dic["income"]   = 0
             dic["spending"] = 0
 
             data.append(dic)
-        
+
+        data.reverse()
+
         for balance in balances:
+            year    = balance.use_date.year
             month   = balance.use_date.month
             income  = balance.expense_item.income
             amount  = balance.amount
 
             for d in data:
-                if d["month"] != month:
+                if d["year"] != year or d["month"] != month:
                     continue
                 
                 if income:
@@ -60,4 +68,4 @@ def daily_calc(balances):
                 break
         
         return data
-
+"""

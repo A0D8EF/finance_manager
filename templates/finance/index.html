@@ -8,6 +8,7 @@
     <script src="https://cdn.jsdelivr.net/npm/flatpickr/dist/l10n/ja.js"></script>
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.2/dist/chart.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
 
     <script>
         let DELETE_URL  = "{% url 'finance:index_single' 1 %}"
@@ -26,7 +27,7 @@
                 {% for monthly_balance in monthly_balances %}
                 {% if monthly_balance.month == selected_date.month %}
                 {{ monthly_balance.month }}月の収支：
-                <span {% if monthly_balance.amount >= 0 %}style="color:#143cdb"{% else %}style="color:crimson"{% endif %}>{{ monthly_balance.amount|intcomma }}円</span>
+                <span {% if monthly_balance.amount >= 0 %}style="color:#143cdc"{% else %}style="color:crimson"{% endif %}>&yen;{{ monthly_balance.amount|intcomma }}</span>
                 {% endif %}
                 {% endfor %}
             </div>
@@ -38,21 +39,51 @@
                     <div>
                         {% for monthly_balance in monthly_balances %}
                         {% if monthly_balance.month == selected_date.month %}
-                        収入：{{ monthly_balance.income|intcomma }}円
+                        収入：&yen;{{ monthly_balance.income|intcomma }}
                         {% endif %}
                         {% endfor %}
                     </div>
-                    <canvas id="income_graph"></canvas>
+                    <div style="display:flex; align-items:center;">
+                        <div style="position:relative; width:60%;">
+                            <canvas id="income_graph"></canvas>
+                        </div>
+                        <div style="position:relative; width: 40%;">
+                            <div style=" margin: 0.5rem auto; border-bottom:solid 0.1rem darkgray">費目ごとの内訳</div>
+                            <table style="margin: 0 auto;">
+                                {% for monthly_income in monthly_incomes %}
+                                <tr>
+                                    <td class="monthly_income_label">{{ monthly_income.label }}</td>
+                                    <td class="monthly_income_data" style="text-align:right; padding:0 0.5rem;">{{ monthly_income.amount|default:0|intcomma }}円</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
                 </div>
                 <div id="summary_tab_area_2" class="summary_tab_area">
                     <div>
                         {% for monthly_balance in monthly_balances %}
                         {% if monthly_balance.month == selected_date.month %}
-                        支出：{{ monthly_balance.spending|intcomma }}円
+                        支出：&yen;{{ monthly_balance.spending|intcomma }}
                         {% endif %}
                         {% endfor %}
                     </div>
-                    <canvas id="outgo_graph"></canvas>
+                    <div style="display:flex; align-items:center;">
+                        <div style="position:relative; width:60%;">
+                            <canvas id="spending_graph"></canvas>
+                        </div>
+                        <div style="position:relative; width: 40%;">
+                            <div style=" margin: 0.5rem auto; border-bottom:solid 0.1rem darkgray">費目ごとの内訳</div>
+                            <table style="margin: 0 auto;">
+                                {% for monthly_spending in monthly_spendings %}
+                                <tr>
+                                    <td class="monthly_spending_label">{{ monthly_spending.label }}</td>
+                                    <td class="monthly_spending_data" style="text-align:right; padding:0 0.5rem;">{{ monthly_spending.amount|default:0|intcomma }}円</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -85,7 +116,7 @@
                                 <div class="calender_day">{{ date.day }}</div>
                                 {% for daily_balance in daily_balances %}
                                 {% if daily_balance.day == date.day %}
-                                <div class="day_balance" {% if daily_balance.amount > 0 %}style="color:#143cdb"{% elif daily_balance.amount < 0 %}style="color:crimson"{% else %}style="color:black"{% endif %}>
+                                <div class="day_balance" {% if daily_balance.amount > 0 %}style="color:#143cdc"{% elif daily_balance.amount < 0 %}style="color:crimson"{% else %}style="color:black"{% endif %}>
                                     {{ daily_balance.amount|intcomma }}
                                 </div>
                                 {% endif %}
@@ -108,7 +139,6 @@
                 {% include "finance/calender_header.html" %}
                 <div class="balance_list">
                     {% for balance in balances %}
-                    {% if balance.use_date.year == selected_date.year and balance.use_date.month == selected_date.month %}
                     <div>
                         <div class="balance_list_date">{{ balance.use_date }}</div>
                         <div class="balance_list_content">
@@ -122,7 +152,7 @@
                             <div>{{ balance.expense_item.name|default:"不明" }}</div>
                             <div>
                                 {% if balance.expense_item.income %}
-                                <span style="color: #143cdb; font-weight: bold;">&yen;{{ balance.amount|intcomma }}</span>
+                                <span style="color: #143cdc; font-weight: bold;">&yen;{{ balance.amount|intcomma }}</span>
                                 {% else %}
                                 <span style="color: crimson; font-weight: bold;">&yen;{{ balance.amount|intcomma }}</span>
                                 {% endif %}
@@ -140,7 +170,6 @@
                             </div>
                         </div>
                     </div>
-                    {% endif %}
                     {% endfor %}
                 </div>
                 <div class="add_balance">
@@ -152,12 +181,17 @@
 
             <!-- 月別収支 -->
             <div id="tab_area_3" class="tab_area">
-                {{ selected_date.year }}年の月別収支
-                {% for monthly_balance in monthly_balances %}
-                <div class="border">{{ monthly_balance.month }}月：{{ monthly_balance.amount|intcomma }}円</div>
-                {% endfor %}
-
-                <canvas id="monthly_balance_graph"></canvas>
+                {% include "finance/calender_header.html" %}
+                <div>
+                    <div id="monthly_balance_graph_title">1年間の月別収支</div>
+                    <canvas id="monthly_balance_graph"></canvas>
+                    {% for monthly_balance in monthly_balances %}
+                    {# <div class="border"> #}
+                    <div style="display:none;">
+                        <span class="monthly_balance_label">{{ monthly_balance.year }}年{{ monthly_balance.month }}月</span>：<span class="monthly_balance_data">{{ monthly_balance.amount|intcomma }}円</span>
+                    </div>
+                    {% endfor %}
+                </div>
             </div>
         </div>    
     </div>

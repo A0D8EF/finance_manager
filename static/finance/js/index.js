@@ -50,6 +50,10 @@ window.addEventListener("load", function (){
     $(".trash").on("click", function() { trash( $(this).val() ); });
 
     $(".create_day_balance").on("click", function() { create_day_balance( $(this).data("day") ); });
+
+    draw_bar_graph();
+    draw_income_pie_graph();
+    draw_spending_pie_graph();
 });
 
 function set_tab() {
@@ -216,4 +220,139 @@ function create_day_balance(calender_day){
     flatpickr(".date", config_date);
     $("#modal_chk").prop("checked", true);
 
+}
+
+function draw_bar_graph(){
+
+    let label_elems = $(".monthly_balance_label");
+    let data_elems  = $(".monthly_balance_data");
+
+    let labels      = [];
+    let datas       = [];
+
+    for (let label_elem of label_elems){
+        labels.push(label_elem.innerText.replace("年", "/").replace("月", ""));
+    }
+    for (let data_elem of data_elems){
+        let raw_data    = data_elem.innerText;
+        datas.push(Number(raw_data.replace(/,/g, "").replace("円", "")));
+    }
+
+    let colors      = [];
+    for (let data of datas){
+        if (data >= 0){
+            colors.push('rgba(20,60,220,0.8)');
+        }else{
+            colors.push('rgba(220,20,60,0.8)');
+        }
+    }
+
+    const ctx       = document.getElementById("monthly_balance_graph").getContext("2d");
+    const myChart   = new Chart(ctx, {
+        type: "bar",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "収支",
+                data: datas,
+                backgroundColor: colors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false,
+                }
+            }
+        }
+    });
+}
+
+function draw_income_pie_graph(){
+    let label_elems = $(".monthly_income_label");
+    let data_elems  = $(".monthly_income_data");
+
+    let labels      = [];
+    let datas       = [];
+
+    for (let label_elem of label_elems){
+        labels.push(label_elem.innerText);
+    }
+    for (let data_elem of data_elems){
+        let raw_data    = data_elem.innerText;
+        datas.push(Number(raw_data.replace(/,/g, "").replace("円", "")));
+    }
+    
+    let colors      = [];
+    let base_r      = 20;
+    let base_g      = 60;
+    let base_b      = 220;
+    for (let data of datas){
+        colors.push("rgba(" + String(base_r) + "," + String(base_g) + "," + String(base_b) + ",0.8)");
+        base_b      = base_b / 1.4;
+        base_g  = base_g * 1.1;
+    }
+
+    const ctx       = document.getElementById("income_graph").getContext("2d");
+    const myChart   = new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "収入",
+                data: datas,
+                backgroundColor: colors,
+                borderWidth: 1
+            }]
+        }
+    });
+}
+
+function draw_spending_pie_graph(){
+    let label_elems = $(".monthly_spending_label");
+    let data_elems  = $(".monthly_spending_data");
+
+    let labels      = [];
+    let datas       = [];
+
+    for (let label_elem of label_elems){
+        labels.push(label_elem.innerText);
+    }
+    for (let data_elem of data_elems){
+        let raw_data    = data_elem.innerText;
+        datas.push(Number(raw_data.replace(/,/g, "").replace("円", "")));
+    }
+    
+    let colors      = [];
+    let base_r      = 220;
+    let base_g      = 20;
+    let base_b      = 60;
+    for (let data of datas){
+        colors.push("rgba(" + String(base_r) + "," + String(base_g) + "," + String(base_b) + ",0.8)");
+        base_r      = base_r / 1.2;
+        if (base_r < 60){
+            base_g  = base_g / 1.1;
+            base_b  = base_b / 1.2;
+        }
+    }
+
+    const ctx       = document.getElementById("spending_graph").getContext("2d");
+    const myChart   = new Chart(ctx, {
+        type: "pie",
+        data: {
+            labels: labels,
+            datasets: [{
+                label: "支出",
+                data: datas,
+                backgroundColor: colors,
+                borderWidth: 1
+            }]
+        }
+    });
 }

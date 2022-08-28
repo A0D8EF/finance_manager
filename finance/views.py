@@ -5,6 +5,9 @@ from rest_framework.views import APIView as View
 from allauth.account.admin import EmailAddress
 from django.contrib.auth.mixins import AccessMixin
 
+from django.db.models import Q
+from django.db.models import Sum
+
 from .models import ExpenseItem, Balance
 from .forms import BalanceForm, IncomeForm, ExpenseItemForm, YearMonthForm
 
@@ -51,13 +54,82 @@ class IndexView(LoginRequiredMixin, View):
         context["next_month"], context["last_month"]    = calender.create_months(selected_date)
        
         context["expense_items"]    = ExpenseItem.objects.filter(user=request.user.id)
-        context["balances"]         = Balance.objects.filter(user=request.user.id).order_by("use_date")
+        context["balances"]         = Balance.objects.filter(user=request.user.id, use_date__year=selected_date.year, use_date__month=selected_date.month ).order_by("use_date")
 
-        context["monthly_balances"] = calc.monthly_calc( Balance.objects.filter(user=request.user.id, use_date__year=selected_date.year).order_by("-use_date") )
-        context["daily_balances"]   = calc.daily_calc( Balance.objects.filter(user=request.user.id, use_date__year=selected_date.year, use_date__month=selected_date.month).order_by("-use_date") )
+        # context["monthly_balances"] = calc.monthly_calc( Balance.objects.filter(user=request.user.id, use_date__year=selected_date.year).order_by("-use_date"), selected_date )
+        # context["daily_balances"]   = calc.daily_calc( Balance.objects.filter(user=request.user.id, use_date__year=selected_date.year, use_date__month=selected_date.month).order_by("-use_date") )
         # models.DateField のフィールド名に __year で年を取り出す
 
         context["calender"]       = calender.create_calender(selected_date.year, selected_date.month)
+
+
+        monthly_balances    = []
+        for i in range(0,12):
+            dic             = {}
+            year            = int(selected_date.year)
+            month           = int(selected_date.month)-i
+            if month < 1:
+                year  = int(selected_date.year)-1
+                month = 12 + month
+            total_income    = Balance.objects.filter(user=request.user.id, use_date__year=year, use_date__month=month, expense_item__income=True).aggregate(Sum("amount"))
+            total_spending  = Balance.objects.filter(user=request.user.id, use_date__year=year, use_date__month=month, expense_item__income=False).aggregate(Sum("amount"))
+
+            if total_income["amount__sum"] == None:
+                total_income["amount__sum"] = 0
+            if total_spending["amount__sum"] == None:
+                total_spending["amount__sum"] = 0
+            
+            dic["year"]     = year
+            dic["month"]    = month
+            dic["amount"]   = total_income["amount__sum"] - total_spending["amount__sum"]
+            dic["income"]   = total_income["amount__sum"]
+            dic["spending"] = total_spending["amount__sum"]
+
+            monthly_balances.append(dic)
+        monthly_balances.reverse()
+        context["monthly_balances"] = monthly_balances
+
+
+        daily_balances      = []
+        dt = datetime.date(selected_date.year, selected_date.month, 1)
+        while True:
+            dic             = {}
+            total_income    = Balance.objects.filter(user=request.user.id, use_date__year=dt.year, use_date__month=dt.month, use_date__day=dt.day, expense_item__income=True).aggregate(Sum("amount"))
+            total_spending  = Balance.objects.filter(user=request.user.id, use_date__year=dt.year, use_date__month=dt.month, use_date__day=dt.day, expense_item__income=False).aggregate(Sum("amount"))
+
+            if total_income["amount__sum"] == None:
+                total_income["amount__sum"] = 0
+            if total_spending["amount__sum"] == None:
+                total_spending["amount__sum"] = 0
+            
+            dic["day"]      = dt.day
+            dic["amount"]   = total_income["amount__sum"] - total_spending["amount__sum"]
+
+            daily_balances.append(dic)
+            dt += datetime.timedelta(days=1)
+
+            if selected_date.month != dt.month:
+                break
+        context["daily_balances"]   = daily_balances
+
+
+        incomes     = []
+        spendings   = []
+        for expense_item in context["expense_items"]:
+            query       = Q( user=request.user.id, use_date__year=selected_date.year, use_date__month=selected_date.month, expense_item=expense_item.id )
+            balances    = Balance.objects.filter(query).aggregate(Sum("amount"))
+
+            dic             = {}
+            dic["label"]    = expense_item.name
+            dic["amount"]   = balances["amount__sum"]
+
+            if expense_item.income:
+                incomes.append(dic)
+            else:
+                spendings.append(dic)
+            
+        context["monthly_incomes"]  = incomes
+        context["monthly_spendings"] = spendings
 
         return render(request, "finance/index.html", context)
     
