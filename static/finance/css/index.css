@@ -14,7 +14,7 @@
 
 /* summary */
 #summary {
-    margin: 0.5rem;
+    margin: 0 0.5rem;
     padding: 1rem 0;
     font-size: 1.75rem;
     font-weight: bold;
@@ -36,7 +36,7 @@
     overflow-y: auto;
     border: solid 0.1rem #288c66;
     margin-top: 0; */
-    padding: 1rem;
+    /* padding: 1rem; */
 }
 .summary_tab_label {
     display: inline-block;

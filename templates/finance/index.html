@@ -22,6 +22,7 @@
 {% block main %}
     
     <div class="index_flexbox">
+        <!-- サマリー -->
         <div>
             <div id="summary">
                 {% for monthly_balance in monthly_balances %}
@@ -36,24 +37,24 @@
                 <input type="radio" name="summary_tab" id="summary_tab_radio_2" class="summary_tab_radio" checked><label for="summary_tab_radio_2" class="summary_tab_label">支出</label>
                 
                 <div id="summary_tab_area_1" class="summary_tab_area">
-                    <div>
+                    <div style="margin-bottom:1rem; font-size:1.25rem; font-weight:bold;">
                         {% for monthly_balance in monthly_balances %}
                         {% if monthly_balance.month == selected_date.month %}
-                        収入：&yen;{{ monthly_balance.income|intcomma }}
+                        総収入：&yen;{{ monthly_balance.income|intcomma }}
                         {% endif %}
                         {% endfor %}
                     </div>
-                    <div style="display:flex; align-items:center;">
+                    <div style="display:flex; align-items:center; justify-content:space-around;">
                         <div style="position:relative; width:60%;">
                             <canvas id="income_graph"></canvas>
                         </div>
-                        <div style="position:relative; width: 40%;">
-                            <div style=" margin: 0.5rem auto; border-bottom:solid 0.1rem darkgray">費目ごとの内訳</div>
-                            <table style="margin: 0 auto;">
+                        <div>
+                            <div style="margin: 0.25rem auto; border-bottom:solid 0.1rem darkgray">費目ごとの内訳</div>
+                            <table style="margin: 0.25rem auto;">
                                 {% for monthly_income in monthly_incomes %}
                                 <tr>
-                                    <td class="monthly_income_label">{{ monthly_income.label }}</td>
-                                    <td class="monthly_income_data" style="text-align:right; padding:0 0.5rem;">{{ monthly_income.amount|default:0|intcomma }}円</td>
+                                    <td class="monthly_income_label" style="padding:0 0.5rem;">{{ monthly_income.label }}</td>
+                                    <td class="monthly_income_data" style="text-align:right; padding:0 0.5rem;">&yen;{{ monthly_income.amount|default:0|intcomma }}</td>
                                 </tr>
                                 {% endfor %}
                             </table>
@@ -61,24 +62,24 @@
                     </div>
                 </div>
                 <div id="summary_tab_area_2" class="summary_tab_area">
-                    <div>
+                    <div style="margin-bottom:1rem; font-size:1.25rem; font-weight:bold;">
                         {% for monthly_balance in monthly_balances %}
                         {% if monthly_balance.month == selected_date.month %}
-                        支出：&yen;{{ monthly_balance.spending|intcomma }}
+                        総支出：&yen;{{ monthly_balance.spending|intcomma }}
                         {% endif %}
                         {% endfor %}
                     </div>
-                    <div style="display:flex; align-items:center;">
+                    <div style="display:flex; align-items:center; justify-content:space-around;">
                         <div style="position:relative; width:60%;">
                             <canvas id="spending_graph"></canvas>
                         </div>
-                        <div style="position:relative; width: 40%;">
-                            <div style=" margin: 0.5rem auto; border-bottom:solid 0.1rem darkgray">費目ごとの内訳</div>
-                            <table style="margin: 0 auto;">
+                        <div>
+                            <div style="margin: 0.25rem auto; border-bottom:solid 0.1rem darkgray">費目ごとの内訳</div>
+                            <table style="margin: 0.25rem auto;">
                                 {% for monthly_spending in monthly_spendings %}
                                 <tr>
-                                    <td class="monthly_spending_label">{{ monthly_spending.label }}</td>
-                                    <td class="monthly_spending_data" style="text-align:right; padding:0 0.5rem;">{{ monthly_spending.amount|default:0|intcomma }}円</td>
+                                    <td class="monthly_spending_label" style="padding:0 0.5rem;">{{ monthly_spending.label }}</td>
+                                    <td class="monthly_spending_data" style="text-align:right; padding:0 0.5rem;">&yen;{{ monthly_spending.amount|default:0|intcomma }}</td>
                                 </tr>
                                 {% endfor %}
                             </table>
@@ -87,7 +88,8 @@
                 </div>
             </div>
         </div>
-    
+
+        <!-- タブシステム -->
         <div>
             <input type="radio" name="tab_system" id="tab_radio_1" class="tab_radio" checked><label for="tab_radio_1" class="tab_label">カレンダー</label>
             <input type="radio" name="tab_system" id="tab_radio_2" class="tab_radio"><label for="tab_radio_2" class="tab_label">収支一覧</label>
@@ -183,11 +185,11 @@
             <div id="tab_area_3" class="tab_area">
                 {% include "finance/calender_header.html" %}
                 <div>
-                    <div id="monthly_balance_graph_title">1年間の月別収支</div>
+                    <div id="monthly_balance_graph_title">{{ monthly_balances.0.year }}年{{ monthly_balances.0.month }}月~{{ selected_date.year }}年{{ selected_date.month }}月までの1年間の月別収支</div>
                     <canvas id="monthly_balance_graph"></canvas>
                     {% for monthly_balance in monthly_balances %}
                     {# <div class="border"> #}
-                    <div style="display:none;">
+                    <div class="border">
                         <span class="monthly_balance_label">{{ monthly_balance.year }}年{{ monthly_balance.month }}月</span>：<span class="monthly_balance_data">{{ monthly_balance.amount|intcomma }}円</span>
                     </div>
                     {% endfor %}

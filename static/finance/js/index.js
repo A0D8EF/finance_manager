@@ -284,9 +284,11 @@ function draw_income_pie_graph(){
     for (let label_elem of label_elems){
         labels.push(label_elem.innerText);
     }
+    let total       = 0;
     for (let data_elem of data_elems){
         let raw_data    = data_elem.innerText;
-        datas.push(Number(raw_data.replace(/,/g, "").replace("円", "")));
+        datas.push(Number(raw_data.replace(/,/g, "").replace("\xA5", "")));
+        total += Number(raw_data.replace(/,/g, "").replace("\xA5", ""))
     }
     
     let colors      = [];
@@ -310,7 +312,35 @@ function draw_income_pie_graph(){
                 backgroundColor: colors,
                 borderWidth: 1
             }]
-        }
+        },
+        options: {
+            // CHIPS:https://blog.imind.jp/entry/2019/07/19/210646
+            plugins: {
+                // tooltip: {
+                //     enabled: false
+                // },
+                datalabels: {
+                    font: {
+                        weight: "bold",
+                        size: 16
+                    },
+                    formatter: function( value, ctx ) {
+                        let label = ctx.chart.data.labels[ctx.dataIndex];
+                        if (value/total < 0.1) {
+                            return "";
+                        }
+                        return label + '\n' + "\xA5" + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    },
+                    color: "#ffffff"
+                },
+                legend: {
+                        display: false,
+                },
+            }
+        },
+        plugins: [
+            ChartDataLabels,
+        ],
     });
 }
 
@@ -324,9 +354,11 @@ function draw_spending_pie_graph(){
     for (let label_elem of label_elems){
         labels.push(label_elem.innerText);
     }
+    let total       = 0;
     for (let data_elem of data_elems){
         let raw_data    = data_elem.innerText;
-        datas.push(Number(raw_data.replace(/,/g, "").replace("円", "")));
+        datas.push(Number(raw_data.replace(/,/g, "").replace("\xA5", "")));
+        total += Number(raw_data.replace(/,/g, "").replace("\xA5", ""))
     }
     
     let colors      = [];
@@ -353,6 +385,34 @@ function draw_spending_pie_graph(){
                 backgroundColor: colors,
                 borderWidth: 1
             }]
-        }
+        },
+        options: {
+            // CHIPS:https://blog.imind.jp/entry/2019/07/19/210646
+            plugins: {
+                // tooltip: {
+                //     enabled: false
+                // },
+                datalabels: {
+                    font: {
+                        weight: "bold",
+                        size: 16
+                    },
+                    formatter: function( value, ctx ) {
+                        let label = ctx.chart.data.labels[ctx.dataIndex];
+                        if (value/total < 0.1) {
+                            return "";
+                        }
+                        return label + '\n' + "\xA5" + value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+                    },
+                    color: "#ffffff"
+                },
+                legend: {
+                        display: false,
+                },
+            }
+        },
+        plugins: [
+            ChartDataLabels,
+        ],
     });
 }
