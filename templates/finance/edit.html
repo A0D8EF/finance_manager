@@ -25,7 +25,7 @@
 
     <input class="form-control my-2" type="number" name="amount" value="{{ balance.amount }}" min="0" required>
     
-    <textarea class="form-control my-2" name="description" value="{{ balance.description }}" placeholder="備考"></textarea>
+    <textarea class="form-control my-2" name="description" value="{{ balance.description }}" placeholder="備考">{{ balance.description }}</textarea>
 
     <div class="form-row my-2">
         <button class="col-sm-6 btn btn-primary submit_edit" type="button" value="{{ balance.id }}">編集</button>

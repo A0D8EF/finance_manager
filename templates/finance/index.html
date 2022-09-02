@@ -118,9 +118,9 @@
                                 <div class="calender_day">{{ date.day }}</div>
                                 {% for daily_balance in daily_balances %}
                                 {% if daily_balance.day == date.day %}
-                                <div class="day_balance" {% if daily_balance.amount > 0 %}style="color:#143cdc"{% elif daily_balance.amount < 0 %}style="color:crimson"{% else %}style="color:black"{% endif %}>
+                                <a class="day_balance" href="#{{selected_date|date:'Ym'}}{{date.day}}" {% if daily_balance.amount > 0 %}style="color:#143cdc" {% elif daily_balance.amount < 0 %}style="color:crimson" href="#{{selected_date|date:'Ym'}}{{date.day}}"{% else %}style="color:black"{% endif %}>
                                     {{ daily_balance.amount|intcomma }}
-                                </div>
+                                </a>
                                 {% endif %}
                                 {% endfor %}
                             </td>
@@ -141,7 +141,7 @@
                 {% include "finance/calender_header.html" %}
                 <div class="balance_list">
                     {% for balance in balances %}
-                    <div>
+                    <div id="{{ balance.use_date|date:'Ymj' }}">
                         <div class="balance_list_date">{{ balance.use_date }}</div>
                         <div class="balance_list_content">
                             <div>
@@ -171,6 +171,9 @@
                                 {% include "finance/edit.html" with balance=balance expense_items=expense_items %}
                             </div>
                         </div>
+                        {% if balance.description %}
+                        <div class="balance_list_description">{{ balance.description|linebreaksbr }}</div>
+                        {% endif %}
                     </div>
                     {% endfor %}
                 </div>
@@ -184,15 +187,31 @@
             <!-- 月別収支 -->
             <div id="tab_area_3" class="tab_area">
                 {% include "finance/calender_header.html" %}
-                <div>
+                <div class="monthly_balances">
                     <div id="monthly_balance_graph_title">{{ monthly_balances.0.year }}年{{ monthly_balances.0.month }}月~{{ selected_date.year }}年{{ selected_date.month }}月までの1年間の月別収支</div>
                     <canvas id="monthly_balance_graph"></canvas>
-                    {% for monthly_balance in monthly_balances %}
-                    {# <div class="border"> #}
-                    <div class="border">
-                        <span class="monthly_balance_label">{{ monthly_balance.year }}年{{ monthly_balance.month }}月</span>：<span class="monthly_balance_data">{{ monthly_balance.amount|intcomma }}円</span>
+                    <div class="row monthly_balance_list">
+                        <div class="col pr-0 d-flex justify-content-center">
+                            <table>
+                                {% for monthly_balance in monthly_balances_left %}
+                                <tr>
+                                    <td style="padding-right:1rem;"><span class="monthly_balance_label">{{ monthly_balance.year }}/{{ monthly_balance.month }}</span></td>
+                                    <td style="text-align:right;"><span class="monthly_balance_data">&yen;{{ monthly_balance.amount|intcomma }}</span></td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <div class="col pr-0 d-flex justify-content-center">
+                            <table>
+                            {% for monthly_balance in monthly_balances_right %}
+                            <tr>
+                                <td style="padding-right:1rem;"><span class="monthly_balance_label">{{ monthly_balance.year }}/{{ monthly_balance.month }}</span></td>
+                                <td style="text-align:right;"><span class="monthly_balance_data">&yen;{{ monthly_balance.amount|intcomma }}</span></td>
+                            </tr>
+                            {% endfor %}
+                            </table>
+                        </div>
                     </div>
-                    {% endfor %}
                 </div>
             </div>
         </div>    

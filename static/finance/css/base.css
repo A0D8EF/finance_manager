@@ -1,22 +1,28 @@
 header {
     /* background: #b33e5c; ワインレッド */
-    background: #288c66;
+    /* background: #288c66; */
     display: flex;
     justify-content: space-between;
     align-items: flex-end;
     margin-bottom: 0.5rem;
+    border-bottom: solid 0.2rem #288c66;
+    box-shadow: 0 0.1rem rgba(0, 0, 0, 0.15);
 }
 
 .title {
-    color: white;
+    /* color: white; */
     font-weight: bold;
 
     padding: 0.3rem;
 }
 
-.title > span {
+.logo {
+    color: #288c66;
     display: inline-block;
     padding: 0 1rem;
+}
+.logo:hover {
+    color: #288c66;
 }
 
 nav {
@@ -25,11 +31,11 @@ nav {
 
 nav > a {
     display: inline-block;
-    color: white;
+    color: #288c66;
     padding: 0.3rem 0.3rem;
 }
 
 nav > a:hover {
-    color: white;
+    color: #288c66;
     text-decoration: underline;
 }

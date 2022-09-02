@@ -54,6 +54,13 @@ window.addEventListener("load", function (){
     draw_bar_graph();
     draw_income_pie_graph();
     draw_spending_pie_graph();
+
+    $(".day_balance").on("click", function() {
+        $("#tab_radio_1").prop("checked", false);
+        $("#tab_radio_2").prop("checked", true);
+        $("#modal_chk").prop("checked", false);
+        console.log($(this).prop("href"));
+    })
 });
 
 function set_tab() {
@@ -235,7 +242,7 @@ function draw_bar_graph(){
     }
     for (let data_elem of data_elems){
         let raw_data    = data_elem.innerText;
-        datas.push(Number(raw_data.replace(/,/g, "").replace("円", "")));
+        datas.push(Number(raw_data.replace(/,/g, "").replace("\xA5", "")));
     }
 
     let colors      = [];

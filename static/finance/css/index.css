@@ -140,6 +140,7 @@
 .calender td {
     border: solid 0.1rem black;
     position: relative;
+    width: calc(100%/7);
 }
 .calender_head > tr > td { padding: 0.5rem; }
 .calender td:nth-child(1) {
@@ -188,7 +189,6 @@
 .balance_list > div {
     width: 100%;
     padding: 0.25rem 0;
-    margin: 0 auto;
     border-bottom: solid 0.1rem darkgray;
     
     display: flex;
@@ -196,6 +196,9 @@
     align-items: center;
 
     flex-wrap: wrap;
+
+    /* ツールチップの配置を早大は一にするため、position: relativeにする */
+    position: relative;
 }
 .balance_list_date{
     width: 25%;
@@ -216,21 +219,44 @@
     padding-left: 0.5rem;
     text-align: right;
 }
-
 .trash, .edit {
     border: none;
     background-color: white;
     color: #288c66;
     cursor: pointer;
 }
+.balance_list_description {
+    display: none;
+    max-width: 50%;
+    position: absolute;
+    padding: 0.25rem 0.5rem;
+
+    font-size: 0.9rem;
+
+    top: 1.5rem;
+    left: 55%;
+
+    background: black;
+    color: white;
+    border-radius: 0.5rem;
+    opacity: 0.75;
+}
+.balance_list_date:hover ~ .balance_list_description { display: inline-block; }
+.balance_list_content:hover ~ .balance_list_description { display: inline-block; }
+.balance_list_description:hover { display: inline-block; }
 
 /* tab3: monthly_balance */
-#tab_area_3 > div {
+.monthly_balances {
     width: 95%;
 }
 #monthly_balance_graph_title {
     margin: 0.5rem 0 0.2rem 0;
     text-align: center;
+}
+.monthly_balance_list {
+    display: flex;
+    justify-content: space-around;
+    margin: 1rem auto 0 auto;
 }
 
 /* income toggle */
@@ -282,6 +308,7 @@ input[type="checkbox"].income_chk:checked + .income_label::before {
 
 .modal_body, .edit_modal_body {
     display: none;
+    z-index: 10;
 }
 
 .modal_bg, .edit_modal_bg {

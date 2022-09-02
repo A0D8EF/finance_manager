@@ -87,6 +87,18 @@ class IndexView(LoginRequiredMixin, View):
 
             monthly_balances.append(dic)
         monthly_balances.reverse()
+
+        length  = len(monthly_balances)
+        harf    = int(length / 2)
+
+        context["monthly_balances_left"]    = []
+        context["monthly_balances_right"]   = []
+        for i in range(harf):
+            context["monthly_balances_left"].append(monthly_balances[i])
+        
+        for i in range(harf, length):
+            context["monthly_balances_right"].append(monthly_balances[i])
+
         context["monthly_balances"] = monthly_balances
 
 
