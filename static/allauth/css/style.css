@@ -13,7 +13,8 @@ body {
 
 .body_area_inner {
     padding: 1rem;
-    border: solid 0.2rem orange;
+    border: solid 0.2rem #288c66;
+    border-radius: 0.5rem;
 }
 
 h1 {
@@ -27,8 +28,8 @@ input[type="text"], input[type="password"], input[type="email"]{
     font-size: 1rem;
     color: #495057;
     background: white;
-    border: 1px solid orange;
-    border-radius: 25rem;
+    border: 1px solid #288c66;
+    border-radius: 0.5rem;
     box-sizing: border-box;
 }
 
@@ -37,7 +38,8 @@ button {
     width: 100%;
     margin: 0.5rem 0;
     font-size: 1rem;
-    border: 1px solid orange;
+    border: 1px solid #288c66;
+    border-radius: 0.2rem;
     cursor: pointer;
     transition: 0.2s;
     padding: 0.5rem;
@@ -48,6 +50,7 @@ button {
 }
 
 button:hover{
-    background: orange;
+    background: #288c66;
     transition: 0.2s;
+    color: white;
 }

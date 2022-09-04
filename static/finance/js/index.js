@@ -49,7 +49,11 @@ window.addEventListener("load", function (){
     // balanceの削除
     $(".trash").on("click", function() { trash( $(this).val() ); });
 
-    $(".create_day_balance").on("click", function() { create_day_balance( $(this).data("day") ); });
+    $(".create_day_balance").on("click", function() {
+        if ( !(event.target.closest(".day_balance")) ){
+            create_day_balance( $(this).data("day") );
+        }
+     });
 
     draw_bar_graph();
     draw_income_pie_graph();
@@ -58,8 +62,6 @@ window.addEventListener("load", function (){
     $(".day_balance").on("click", function() {
         $("#tab_radio_1").prop("checked", false);
         $("#tab_radio_2").prop("checked", true);
-        $("#modal_chk").prop("checked", false);
-        console.log($(this).prop("href"));
     })
 });
 
