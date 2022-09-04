@@ -56,14 +56,14 @@ if DEBUG:
 else:
     pass
 
-#TODO:SendgridのAPIキーと送信元メールアドレスを入れていない時、以下が実行されると必ずエラーになる点に注意。
-EMAIL_BACKEND       = "sendgrid_backend.SendgridBackend"
+# #TODO:SendgridのAPIキーと送信元メールアドレスを入れていない時、以下が実行されると必ずエラーになる点に注意。
+# EMAIL_BACKEND       = "sendgrid_backend.SendgridBackend"
 
-DEFAULT_FROM_EMAIL  = local_settings.DEFAULT_FROM_EMAIL
-SENDGRID_API_KEY    = local_settings.SENDGRID_API_KEY
+# DEFAULT_FROM_EMAIL  = local_settings.DEFAULT_FROM_EMAIL
+# SENDGRID_API_KEY    = local_settings.SENDGRID_API_KEY
 
-#Sendgrid利用時はサンドボックスモードを無効化しておく。
-SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+# #Sendgrid利用時はサンドボックスモードを無効化しておく。
+# SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
 #################django-allauthでのメール認証設定ここまで###################
 
@@ -185,7 +185,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 if not DEBUG:
 
     # ALLOWED_HOSTSにホスト名)を入力
-    ALLOWED_HOSTS = [ 'hogehoge.herokuapp.com' ]
+    ALLOWED_HOSTS = [ 'finance-uniform-manager.herokuapp.com' ]
 
     # 静的ファイル配信ミドルウェア、whitenoiseを使用。※ 順番不一致だと動かないため下記をそのままコピーする。
     MIDDLEWARE = [
