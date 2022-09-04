@@ -184,8 +184,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 if not DEBUG:
 
+    import os
     # ALLOWED_HOSTSにホスト名)を入力
-    ALLOWED_HOSTS = [ 'finance-uniform-manager.herokuapp.com' ]
+    ALLOWED_HOSTS = [ os.environ['HEROKU_DOMAIN'] ]
 
     # 静的ファイル配信ミドルウェア、whitenoiseを使用。※ 順番不一致だと動かないため下記をそのままコピーする。
     MIDDLEWARE = [
@@ -203,10 +204,10 @@ if not DEBUG:
     DATABASES = {
             'default': {
                 'ENGINE': 'django.db.backends.postgresql_psycopg2',
-                'NAME': '',
-                'USER': '',
-                'PASSWORD': '',
-                'HOST': '',
+                'NAME': os.environ['HEROKU_DB_NAME'],
+                'USER': os.environ['HEROKU_DB_USER'],
+                'PASSWORD': os.environ['HEROKU_DB_PW'],
+                'HOST': os.environ['HEROKU_DB_HOST'],
                 'PORT': '5432',
                 }
             }
