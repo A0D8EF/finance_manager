@@ -23,13 +23,13 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-8w^wrtc_@%y3$sun9n#mb)3iorijcochb2c4$tc02i-x9%vqdi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = []
 
 #################django-allauthでのメール認証設定ここから###################
 
-from . import local_settings
+# from . import local_settings
 
 #djangoallauthでメールでユーザー認証する際に必要になる認証バックエンド
 AUTHENTICATION_BACKENDS = [
