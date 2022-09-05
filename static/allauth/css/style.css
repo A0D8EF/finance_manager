@@ -12,7 +12,7 @@ body {
 }
 
 .body_area_inner {
-    padding: 1rem;
+    padding: 1.5rem;
     border: solid 0.2rem #288c66;
     border-radius: 0.5rem;
 }
@@ -33,12 +33,13 @@ input[type="text"], input[type="password"], input[type="email"]{
     box-sizing: border-box;
 }
 
-button {
+button, input[type="submit"] {
     display: block;
     width: 100%;
     margin: 0.5rem 0;
     font-size: 1rem;
     border: 1px solid #288c66;
+    background: #eee;
     border-radius: 0.2rem;
     cursor: pointer;
     transition: 0.2s;
@@ -49,8 +50,32 @@ button {
     vertical-align: middle;
 }
 
-button:hover{
+button:hover, input[type="submit"]:hover {
     background: #288c66;
+    transition: 0.2s;
+    color: white;
+}
+
+.back-btn {
+    display: block;
+    /* width: 100%; */
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    border: 1px solid crimson;
+    background: #eee;
+    border-radius: 0.2rem;
+    cursor: pointer;
+    transition: 0.2s;
+    padding: 0.5rem;
+    line-height: 1.5;
+    user-select: none;
+    text-align: center;
+    vertical-align: middle;
+    color: black;
+    text-decoration: none;
+}
+.back-btn:hover{
+    background: crimson;
     transition: 0.2s;
     color: white;
 }

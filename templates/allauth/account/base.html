@@ -14,6 +14,7 @@
 
                 {% block body %}
 
+                {% comment %}
                 {% if messages %}
                 <div class="message_area">
                     <strong>Messages:</strong>
@@ -37,6 +38,7 @@
                         {% endif %}
                     </ul>
                 </div>
+                {% endcomment %}
 
                 <!--TODO:ここにログインフォーム等が表示される-->
                 {% block content %}
