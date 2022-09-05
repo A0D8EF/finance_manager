@@ -30,6 +30,7 @@ ALLOWED_HOSTS = []
 #################django-allauthでのメール認証設定ここから###################
 
 # from . import local_settings
+import os
 
 #djangoallauthでメールでユーザー認証する際に必要になる認証バックエンド
 AUTHENTICATION_BACKENDS = [
@@ -60,10 +61,12 @@ else:
 # EMAIL_BACKEND       = "sendgrid_backend.SendgridBackend"
 
 # DEFAULT_FROM_EMAIL  = local_settings.DEFAULT_FROM_EMAIL
+DEFAULT_FROM_EMAIL  = os.environ['DEFAULT_FROM_EMAIL']
 # SENDGRID_API_KEY    = local_settings.SENDGRID_API_KEY
+SENDGRID_API_KEY    = os.environ['SENDGRID_API_KEY']
 
-# #Sendgrid利用時はサンドボックスモードを無効化しておく。
-# SENDGRID_SANDBOX_MODE_IN_DEBUG = False
+#Sendgrid利用時はサンドボックスモードを無効化しておく。
+SENDGRID_SANDBOX_MODE_IN_DEBUG = False
 
 #################django-allauthでのメール認証設定ここまで###################
 
@@ -184,7 +187,6 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 if not DEBUG:
 
-    import os
     # ALLOWED_HOSTSにホスト名)を入力
     ALLOWED_HOSTS = [ os.environ['HEROKU_DOMAIN'] ]
 
